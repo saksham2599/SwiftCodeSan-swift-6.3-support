@@ -522,7 +522,9 @@ extension ProtocolDeclSyntax: DeclProtocol {
     }
 
     var refTypes: [String] {
-        return boundTypesAL
+        return [boundTypesAL,
+                attributes.tokens(viewMode: .all).exprTokenList
+            ].compactMap{$0}.flatMap{$0}
     }
 
     var declType: DeclType {
@@ -587,6 +589,7 @@ extension ClassDeclSyntax: DeclProtocol {
     var refTypes: [String] {
         return [boundTypesAL,
                 memberBlock.members.boundTypesAL,
+                attributes.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -774,7 +777,9 @@ extension EnumDeclSyntax: DeclProtocol {
     }
 
     var refTypes: [String] {
-        return boundTypesAL
+        return [boundTypesAL,
+                attributes.tokens(viewMode: .all).exprTokenList
+            ].compactMap{$0}.flatMap{$0}
     }
 }
 
@@ -825,6 +830,7 @@ extension StructDeclSyntax: DeclProtocol {
     var refTypes: [String] {
         return [boundTypesAL,
                 memberBlock.members.boundTypesAL,
+                attributes.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}
     }
 }

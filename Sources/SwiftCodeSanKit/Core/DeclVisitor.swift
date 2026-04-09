@@ -53,18 +53,10 @@ final class DeclVisitor: SyntaxVisitor {
     }
 
     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-        if node.attributesDescription.contains(String.propertyWrapper) {
-            return .skipChildren
-        }
-
         updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .visitChildren
     }
     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-        if node.attributesDescription.contains(String.propertyWrapper) {
-            return .skipChildren
-        }
-
         updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .skipChildren
     }
