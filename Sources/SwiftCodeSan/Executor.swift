@@ -24,9 +24,6 @@ struct Executor: ParsableCommand {
     @Flag(name: .customLong("remove-deadcode"),
           help: "If set, it will remove dead code and generate a report in the logfile. If an --in-place option is set, files will be modified directly.")
     private var removeDeadcode: Bool = false
-    @Flag(name: .customLong("delete-unused"),
-          help: "Alias for --remove-deadcode. If set, it will remove dead code.")
-    private var deleteUnused: Bool = false
     @Flag(name: .customLong("remove-unused-imports"),
           help: "If set, it will remove unused import statements and generate a report in the logfile. If an --in-place option is set, files will be modified directly.")
     private var removeUnusedImports: Bool = false
@@ -166,8 +163,6 @@ struct Executor: ParsableCommand {
                 deleteAnnotation)
     }
 
-
-
     private func execute(with filesToModules: [String: String],
                           _ testfiles: [String]?,
                           _ root: String?,
@@ -179,8 +174,8 @@ struct Executor: ParsableCommand {
                           _ whitelist: Whitelist?,
                           _ deleteAnnotation: String?) {
 
-        // Remove dead code first (includes --delete-unused alias)
-        if removeDeadcode || deleteUnused {
+        // Remove dead code first
+        if removeDeadcode {
             removeDeadDecls(filesToModules: filesToModules,
                             whitelist: whitelist,
                             topDeclsOnly: topDeclsOnly,
