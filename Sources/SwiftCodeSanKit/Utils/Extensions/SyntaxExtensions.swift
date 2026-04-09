@@ -19,14 +19,14 @@ import Foundation
 import SwiftSyntax
 
 extension CodeBlockItemSyntax.Item {
-    func referencedTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
+    func referencedTypes(with declMap: DeclMap, allowUnknown: Bool = false, filterKey: String? = nil) -> [String] {
         switch self {
         case .expr(let expr):
-            return Syntax(expr).referencedTypes(with: declMap, filterKey: filterKey)
+            return Syntax(expr).referencedTypes(with: declMap, allowUnknown: allowUnknown, filterKey: filterKey)
         case .decl(let decl):
-            return Syntax(decl).referencedTypes(with: declMap, filterKey: filterKey)
+            return Syntax(decl).referencedTypes(with: declMap, allowUnknown: allowUnknown, filterKey: filterKey)
         case .stmt(let stmt):
-            return Syntax(stmt).referencedTypes(with: declMap, filterKey: filterKey)
+            return Syntax(stmt).referencedTypes(with: declMap, allowUnknown: allowUnknown, filterKey: filterKey)
         @unknown default:
             return []
         }
@@ -39,11 +39,11 @@ protocol DeclProtocol {
     var fullName: String { get }
     var declType: DeclType { get }
     var inheritedTypes: [String] { get }
-    func referencedTypes(with declMap: DeclMap, filterKey: String?) -> [String]
+    func referencedTypes(with declMap: DeclMap, allowUnknown: Bool, filterKey: String?) -> [String]
     var refTypes: [String] { get }
     var boundTypes: [String] { get }
     var boundTypesAL: [String] { get } // Bound types for access levels
-    var accessLevel: String { get }
+    var accessLevel: AccessLevel { get }
     var isOverride: Bool { get }
     var isExprOrStmt: Bool { get }
     func declMetadatas(path: String, module: String, encloser: String, description: String, imports: [String]) -> [DeclMetadata]
@@ -67,14 +67,14 @@ extension DeclProtocol {
                                  inheritedTypes: inheritedTypes,
                                  boundTypes: boundTypes,
                                  boundTypesAL: boundTypesAL,
-                                 isPublicOrOpen: accessLevel.isPublicOrOpen,
+                                 accessLevel: accessLevel,
                                  isOverride: isOverride,
                                  used: false)
           return [val]
       }
 
-    func referencedTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
-        return refTypes.filter { declMap[$0] != nil || $0.contains(".") || $0.hasSuffix("Strings") || $0.hasSuffix("Images") }
+    func referencedTypes(with declMap: DeclMap, allowUnknown: Bool = false, filterKey: String? = nil) -> [String] {
+        return refTypes.filter { allowUnknown || declMap[$0] != nil || $0.contains(".") || $0.hasSuffix("Strings") || $0.hasSuffix("Images") }
     }
 
 }
@@ -93,8 +93,8 @@ extension Syntax: DeclProtocol {
         return name
     }
 
-    var accessLevel: String {
-        return ""
+    var accessLevel: AccessLevel {
+        return .internal
     }
 
     var isOverride: Bool {
@@ -247,10 +247,10 @@ extension DeclSyntax: DeclProtocol {
         return []
     }
 
-    func referencedTypes(with declMap: DeclMap, filterKey: String?) -> [String] {
+    func referencedTypes(with declMap: DeclMap, allowUnknown: Bool = false, filterKey: String? = nil) -> [String] {
         var list = refTypes
         if !declMap.isEmpty {
-            list = list.filter{declMap[$0] != nil}
+            list = list.filter{ allowUnknown || declMap[$0] != nil}
         }
         return list
     }
@@ -342,7 +342,7 @@ extension DeclSyntax: DeclProtocol {
         return []
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         if let d = self.as(FunctionDeclSyntax.self) {
             return d.accessLevel
         } else if let d = self.as(VariableDeclSyntax.self) {
@@ -368,7 +368,7 @@ extension DeclSyntax: DeclProtocol {
         } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.accessLevel
         }
-        return ""
+        return .internal
     }
 
     var isOverride: Bool {
@@ -409,7 +409,7 @@ extension MemberBlockItemSyntax: DeclProtocol {
         return decl.boundTypesAL
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return decl.accessLevel
     }
 
@@ -456,8 +456,8 @@ extension MemberBlockItemListSyntax: DeclProtocol {
         return []
     }
 
-    var accessLevel: String {
-        return ""
+    var accessLevel: AccessLevel {
+        return .internal
     }
 
     var isOverride: Bool {
@@ -501,7 +501,7 @@ extension ProtocolDeclSyntax: DeclProtocol {
         return identifier.text.raw
     }
     
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -568,7 +568,7 @@ extension ClassDeclSyntax: DeclProtocol {
         return identifier.text.raw
     }
     
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
     
@@ -638,7 +638,7 @@ extension ExtensionDeclSyntax: DeclProtocol {
     var declType: DeclType {
         return .extensionType
     }
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -665,13 +665,13 @@ extension ExtensionDeclSyntax: DeclProtocol {
         return boundTypesAL
     }
 
-    func referencedTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
+    func referencedTypes(with declMap: DeclMap, allowUnknown: Bool = false, filterKey: String? = nil) -> [String] {
         var list = [extendedType.tokens(viewMode: .all).exprTokenList,
                     refTypes
             ].compactMap{$0}.flatMap{$0}
 
         if !declMap.isEmpty {
-            list = list.filter{declMap[$0] != nil}
+            list = list.filter{ allowUnknown || declMap[$0] != nil}
         }
 
         return list
@@ -704,7 +704,7 @@ extension EnumCaseDeclSyntax: DeclProtocol {
         return self.elements.description
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -748,7 +748,7 @@ extension EnumDeclSyntax: DeclProtocol {
     var name: String {
         return identifier.text.trimmed.raw
     }
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -803,7 +803,7 @@ extension StructDeclSyntax: DeclProtocol {
     var declType: DeclType {
         return .structType
     }
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -852,7 +852,7 @@ extension AssociatedTypeDeclSyntax: DeclProtocol {
         return .patType
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -898,7 +898,7 @@ extension TypeAliasDeclSyntax: DeclProtocol {
     var declType: DeclType {
         return .typealiasType
     }
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -988,7 +988,7 @@ extension VariableDeclSyntax: DeclProtocol {
                                        inheritedTypes: inheritedTypes,
                                        boundTypes: bound,
                                        boundTypesAL: bound,
-                                       isPublicOrOpen: accessLevel.isPublicOrOpen,
+                                       accessLevel: accessLevel,
                                        isOverride: isOverride,
                                        used: false)
                 list.append(val)
@@ -1013,7 +1013,7 @@ extension VariableDeclSyntax: DeclProtocol {
                                                inheritedTypes: inheritedTypes,
                                                boundTypes: bound,
                                                boundTypesAL: bound,
-                                               isPublicOrOpen: accessLevel.isPublicOrOpen,
+                                               accessLevel: accessLevel,
                                                isOverride: isOverride,
                                                used: false)
                         list.append(val)
@@ -1050,7 +1050,7 @@ extension VariableDeclSyntax: DeclProtocol {
         return .varType
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -1109,7 +1109,7 @@ extension FunctionDeclSyntax: DeclProtocol {
         return .funcType
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
 
@@ -1179,7 +1179,7 @@ extension InitializerDeclSyntax: DeclProtocol {
         return attributes.trimmedDescription ?? ""
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return modifiers.acl
     }
 
@@ -1257,7 +1257,7 @@ extension SubscriptDeclSyntax: DeclProtocol {
         return .subscriptType
     }
 
-    var accessLevel: String {
+    var accessLevel: AccessLevel {
         return modifiers.acl
     }
 
@@ -1307,21 +1307,24 @@ extension AttributeListSyntax {
 }
 
 extension DeclModifierListSyntax {
-    var acl: String {
+    var acl: AccessLevel {
         for modifier in self {
             for token in modifier.tokens(viewMode: .all) {
                 switch token.tokenKind {
-                case .keyword(.public), .keyword(.internal), .keyword(.private), .keyword(.fileprivate):
-                    return token.text
+                case .keyword(.public): return .public
+                case .keyword(.package): return .package
+                case .keyword(.internal): return .internal
+                case .keyword(.private): return .private
+                case .keyword(.fileprivate): return .fileprivate
                 default:
                     // For some reason openKeyword option is not available in TokenKind so need to address separately
                     if token.text == String.open {
-                        return token.text
+                        return .open
                     }
                 }
             }
         }
-        return ""
+        return .internal
     }
 
     var isStatic: Bool {
@@ -1473,3 +1476,18 @@ extension TokenSequence {
 }
 
 
+
+extension Syntax {
+    var encloserName: String {
+        var p = self.parent
+        while let parent = p {
+            if let decl = parent.as(ClassDeclSyntax.self) { return decl.name.description.trimmed }
+            if let decl = parent.as(StructDeclSyntax.self) { return decl.name.description.trimmed }
+            if let decl = parent.as(EnumDeclSyntax.self) { return decl.name.description.trimmed }
+            if let decl = parent.as(ProtocolDeclSyntax.self) { return decl.name.description.trimmed }
+            if let decl = parent.as(ExtensionDeclSyntax.self) { return decl.extendedType.description.trimmed }
+            p = parent.parent
+        }
+        return ""
+    }
+}

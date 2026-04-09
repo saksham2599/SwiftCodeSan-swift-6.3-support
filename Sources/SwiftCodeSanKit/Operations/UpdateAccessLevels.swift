@@ -19,6 +19,7 @@ import Foundation
 nonisolated(unsafe) private var nref = 0
 
 public func updateAccessLevels(filesToModules: [String: String],
+                               modulesToPackages: [String: String]? = nil,
                                whitelist: Whitelist?,
                                inplace: Bool,
                                logFilePath: String? = nil,
@@ -32,6 +33,7 @@ public func updateAccessLevels(filesToModules: [String: String],
     log("Scan and map top-level decls...")
     logTime()
     let declMap = p.scanAndMapDecls(fileToModuleMap: filesToModules,
+                                    moduleToPackageMap: modulesToPackages,
                                     topDeclsOnly: false,
                                     whitelist: whitelist)
     
@@ -40,7 +42,8 @@ public func updateAccessLevels(filesToModules: [String: String],
     log("Check references, look up their source modules, and mark visibility...")
     p.checkRefs(fileToModuleMap: filesToModules, declMap: declMap) { @Sendable (path, refs, imports) in
         if let refModule = filesToModules[path] {
-            markVisiblity(refs, in: refModule, imports: imports, with: declMap, updateMembers: true)
+            let refPackage = modulesToPackages?[refModule]
+            markVisiblity(refs, in: refModule, package: refPackage, imports: imports, with: declMap, updateMembers: true)
         }
     }
     
@@ -60,7 +63,8 @@ public func updateAccessLevels(filesToModules: [String: String],
     let flatDeclMap = flatten(declMap: declMap)
     p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { @Sendable (path, refs, imports) in
         if let refModule = filesToModules[path] {
-            markVisiblity(refs, in: refModule, imports: imports, with: flatDeclMap, updateMembers: false)
+            let refPackage = modulesToPackages?[refModule]
+            markVisiblity(refs, in: refModule, package: refPackage, imports: imports, with: flatDeclMap, updateMembers: false)
         }
         log(counter: &nref, interval: 1000)
     }
@@ -91,10 +95,12 @@ public func updateAccessLevels(filesToModules: [String: String],
     log("Save decls to update per files...")
     for (_, decls) in flatDeclMap {
         for decl in decls {
-            if decl.isPublicOrOpen, !decl.shouldExpose {
+            let targetAL = decl.targetAccessLevel ?? .internal
+            if targetAL < decl.accessLevel {
                 if pathToDeclsUpdate[decl.path] == nil {
                     pathToDeclsUpdate[decl.path] = []
                 }
+                decl.targetAccessLevel = targetAL
                 pathToDeclsUpdate[decl.path]?.append(decl)
             }
         }
@@ -107,7 +113,6 @@ public func updateAccessLevels(filesToModules: [String: String],
     }
     
     if inplace {
-        log("Update decl ALs in files...")
         let updater  = DeclUpdater()
         updater.updateAccessLevels(filesToDecls: pathToDeclsUpdate, filesToModules: filesToModules) { @Sendable (path, content) in
             try? content.write(toFile: path, atomically: true, encoding: .utf8)
@@ -129,7 +134,7 @@ private func updateBoundTypeALs(declMap: DeclMap) {
     for (k, decls) in declMap {
         if !k.isEmpty {  // Empty means expr or stmt
             for decl in decls {
-                if (decl.isPublicOrOpen && decl.shouldExpose) ||
+                if decl.accessLevel >= .package || decl.shouldExpose ||
                     decl.declType == .extensionType ||
                     decl.isExtensionMember {
                     decl.visited = true
@@ -161,6 +166,7 @@ private func updateBoundTypeALs(_ decl: DeclMetadata, level: Int, declMap: DeclM
                     boundDecl.visited = true
                     if decl.module == boundDecl.module || decl.imports.contains(boundDecl.module) {
                         boundDecl.shouldExpose = true
+                        boundDecl.updateTargetAccessLevel(to: .internal)
                         updateBoundTypeALs(boundDecl, level: level + 1, declMap: declMap)
                     }
                 }
@@ -198,17 +204,19 @@ private func updateBoundMemberALs(key cur: DeclMetadata,
     let interfaceMemberNames = interfaceMembers.map{$0.name}
     for member in members {
         if interfaceMemberNames.contains(member.name) {
-            if member.isPublicOrOpen || (curIsExtension && cur.isPublicOrOpen) {
+            if member.accessLevel >= .package || (curIsExtension && cur.accessLevel >= .package) {
                 member.shouldExpose = true
+                member.updateTargetAccessLevel(to: member.accessLevel)
                 
                 // If encloser is extension, it should be also exposed since its member is public/exposed
                 if curIsExtension, !cur.shouldExpose {
                     cur.shouldExpose = true
                 }
             }
-        } else if member.isPublicOrOpen, member.isOverride {
+        } else if member.accessLevel >= .package, member.isOverride {
             // This might be a member overriding stdlib api
             member.shouldExpose = true
+            member.updateTargetAccessLevel(to: member.accessLevel)
         }
     }
     
@@ -226,8 +234,9 @@ private func updateBoundMemberALs(key cur: DeclMetadata,
                        boundDecl.shouldExpose {
                         
                         for member in cur.members {
-                            if member.isPublicOrOpen {
+                            if member.accessLevel >= .package {
                                 member.shouldExpose = true
+                                member.updateTargetAccessLevel(to: member.accessLevel)
                             }
                         }
                         visitedCurrent = true
@@ -236,8 +245,9 @@ private func updateBoundMemberALs(key cur: DeclMetadata,
             } else if !visitedCurrent, cur.inheritedTypes.contains(boundType) {
                 // If parent is not in declMap, assume it's in stdlib.
                 for member in cur.members {
-                    if member.isPublicOrOpen {
+                    if member.accessLevel >= .package {
                         member.shouldExpose = true
+                        member.updateTargetAccessLevel(to: member.accessLevel)
                     }
                 }
                 visitedCurrent = true
@@ -272,7 +282,7 @@ private func resolveInheritance(key cur: DeclMetadata,
                     continue
                 }
                 if parentDecl.declType == .protocolType || parentDecl.declType == .classType || parentDecl.declType == .typealiasType {
-                    if parentDecl.isPublicOrOpen, parentDecl.shouldExpose {
+                    if parentDecl.accessLevel >= .package, parentDecl.shouldExpose {
                         if parentDecl.declType == .protocolType {
                             interfaceMembers.append(contentsOf: parentDecl.members)
                         } else if parentDecl.declType == .classType, cur.declType == .classType {
@@ -304,7 +314,9 @@ private func resolveInheritance(key cur: DeclMetadata,
         }
         
         for member in cur.members {
-            if member.isPublicOrOpen {
+            if member.accessLevel >= .package {
+                member.shouldExpose = true
+                member.updateTargetAccessLevel(to: member.accessLevel)
                 interfaceMembers.append(member)
                 members.append(member)
             }
@@ -313,7 +325,7 @@ private func resolveInheritance(key cur: DeclMetadata,
     }
 }
 
-private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String,  _ imports: [String], declMap: DeclMap) -> Bool {
+private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String, _ refPackage: String?, _ imports: [String], declMap: DeclMap) -> Bool {
     let j = i + 1
     
     if j < bases.count {
@@ -335,10 +347,24 @@ private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String,  
                 }
                 
                 if let list = list, !list.isEmpty {
-                    let checked = traverseMembers(bases, i + 1, refModule, imports, declMap: declMap)
-                    if checked, refModule != prefixDecl.module, imports.contains(prefixDecl.module) {
+                    if traverseMembers(bases, i + 1, refModule, refPackage, imports, declMap: declMap) {
                         for member in list {
-                            member.shouldExpose = true
+                            let updated: Bool
+                            if refModule == member.module {
+                                updated = member.updateTargetAccessLevel(to: .internal)
+                            } else if member.package != nil && member.package == refPackage {
+                                updated = member.updateTargetAccessLevel(to: .package)
+                            } else if imports.contains(member.module) {
+                                let level: AccessLevel = (member.accessLevel == .open) ? .open : .public
+                                updated = member.updateTargetAccessLevel(to: level)
+                                if updated { member.shouldExpose = true }
+                            } else {
+                                updated = false
+                            }
+
+                            if updated {
+                                member.members.filter({$0.name == "init"}).forEach { $0.updateTargetAccessLevel(to: member.targetAccessLevel ?? .internal) }
+                            }
                         }
                     }
                     
@@ -351,7 +377,7 @@ private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String,  
     return true
 }
 
-private func markVisiblity(_ refs: Set<String>, in refModule: String, imports: [String], with declMap: DeclMap, updateMembers: Bool) {
+private func markVisiblity(_ refs: Set<String>, in refModule: String, package refPackage: String?, imports: [String], with declMap: DeclMap, updateMembers: Bool) {
     // Leaf level node checks
     for r in refs {
         
@@ -365,7 +391,7 @@ private func markVisiblity(_ refs: Set<String>, in refModule: String, imports: [
         // First, traverse member access, and update visibility along the way
         var accessedMembers = false
         if let bases = bases {
-            accessedMembers = traverseMembers(bases, 0, refModule, imports, declMap: declMap)
+            accessedMembers = traverseMembers(bases, 0, refModule, refPackage, imports, declMap: declMap)
         }
         if accessedMembers {
             continue
@@ -389,23 +415,16 @@ private func markVisiblity(_ refs: Set<String>, in refModule: String, imports: [
                     // 3. if foo inits are the same for multi-modules:
                     //     - need qualifier X.foo
                     if refModule == refDecl.module {
-                        // r is either declared internally
-                        // so r should not be public, so add [decl.path: r] to pathToUpdateDecls
-                    } else {
-                        // look up imports and check decl.module is in the imports, then decl.shouldBePublic = true, so do nothing.
-                        if imports.contains(refDecl.module) {
-                            
-                            if !refDecl.encloser.isEmpty {
-                                // If it has an encloser (part of a class, protocol, etc),
-                                // check if the encloser is in ref'd.
-                                // Encloser type might not be listed, leakdetect.inst.accumulatedLeaksStream
-                                refDecl.shouldExpose = true
-                            } else {
-                                // then r in decl.module should remain public
-                                refDecl.shouldExpose = true
-                            }
-                        } else {
-                            // r must be part of stdlib, handled in updateMemberALs above.
+                        refDecl.updateTargetAccessLevel(to: .internal)
+                    } else if refDecl.package != nil && refDecl.package == refPackage {
+                        if refDecl.updateTargetAccessLevel(to: .package) {
+                            refDecl.members.filter({$0.name == "init"}).forEach { $0.updateTargetAccessLevel(to: .package) }
+                        }
+                    } else if imports.contains(refDecl.module) {
+                        let level: AccessLevel = (refDecl.accessLevel == .open) ? .open : .public
+                        if refDecl.updateTargetAccessLevel(to: level) {
+                            refDecl.shouldExpose = true
+                            refDecl.members.filter({$0.name == "init"}).forEach { $0.updateTargetAccessLevel(to: level) }
                         }
                     }
                     

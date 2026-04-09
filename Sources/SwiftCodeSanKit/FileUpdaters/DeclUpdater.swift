@@ -17,6 +17,7 @@
 
 import Foundation
 import SwiftSyntax
+import SwiftParser
 
 final class DeclUpdater: @unchecked Sendable {
 
@@ -26,7 +27,7 @@ final class DeclUpdater: @unchecked Sendable {
 
         scan(filesToDecls) { (path, decls, lock) in
             do {
-                let node = try SyntaxParser.parse(path)
+                let node = Parser.parse(source: try String(contentsOfFile: path, encoding: .utf8))
                 let rewriter = AccessLevelRewriter(path, module: filesToModules[path], decls: decls)
                 let ret = rewriter.visit(node)
                 lock?.lock()
@@ -42,7 +43,7 @@ final class DeclUpdater: @unchecked Sendable {
                          completion: @Sendable @escaping (String, String) -> ()) {
         scan(filesToDecls) { (path, decls, lock) in
             do {
-                let node = try SyntaxParser.parse(path)
+                let node = Parser.parse(source: try String(contentsOfFile: path, encoding: .utf8))
                 let remover = DeclRemover(path, decls: decls)
                 let ret = remover.visit(node)
 
@@ -84,7 +85,7 @@ final class DeclUpdater: @unchecked Sendable {
                             unusedImports: [String: [String]],
                             completion: @Sendable @escaping (String, String) -> ()) {
         do {
-            let node = try SyntaxParser.parse(path)
+            let node = Parser.parse(source: try String(contentsOfFile: path, encoding: .utf8))
             let remover = ImportRewriter(path, unusedModules: unusedImports[path])
             let ret = remover.visit(node)
 

@@ -28,17 +28,20 @@ final class DeclVisitor: SyntaxVisitor {
     let topDeclsOnly: Bool
     let whitelistPath: Bool
     let whitelist: Whitelist?
+    let package: String?
     var importedModules = [String]()
 
     init(_ path: String,
          module: String?,
          topDeclsOnly: Bool,
          whitelistPath: Bool,
-         whitelist: Whitelist?) {
+         whitelist: Whitelist?,
+         package: String? = nil) {
         self.whitelist = whitelist
         self.whitelistPath = whitelistPath
         self.path = path
         self.module = module ?? ""
+        self.package = package
         self.topDeclsOnly = topDeclsOnly
         super.init(viewMode: .all)
     }
@@ -97,6 +100,7 @@ final class DeclVisitor: SyntaxVisitor {
 
     private func memberDecls(_ decl: DeclSyntax, encloser: String, encloserDeclType: DeclType, encloserWhitelisted: Bool) -> [DeclMetadata] {
         let mdecls = decl.declMetadatas(path: path, module: module, encloser: encloser, description: decl.description, imports: importedModules)
+        mdecls.forEach { $0.package = package }
 
         for mdecl in mdecls {
             if encloserDeclType == .extensionType {
@@ -120,6 +124,7 @@ final class DeclVisitor: SyntaxVisitor {
 
     private func updateDecl(_ item: DeclProtocol, description: String, members: MemberBlockItemListSyntax?) {
         let decls = item.declMetadatas(path: path, module: module, encloser: "", description: description, imports: importedModules)
+        decls.forEach { $0.package = package }
 
         for decl in decls {
             var shouldWhitelist = (decl.declType == .operatorType)

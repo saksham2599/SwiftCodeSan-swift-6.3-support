@@ -30,18 +30,20 @@ public final class AccessLevelRewriter: SyntaxRewriter {
         self.decls = decls
     }
 
-    private func updateModifiers(_ name: String, fullName: String, description: String, declType: DeclType, modifiers: DeclModifierListSyntax) -> (updated: DeclModifierListSyntax, leadingTrivia: Trivia?, isModified: Bool)? {
-        let contains = decls.contains(where: { (d: DeclMetadata) -> Bool in
-            return d.name == name && d.fullName == fullName && d.declDescription == description && d.declType == declType
+    private func updateModifiers(_ name: String, encloser: String, fullName: String, description: String, declType: DeclType, modifiers: DeclModifierListSyntax) -> (updated: DeclModifierListSyntax, leadingTrivia: Trivia?, isModified: Bool)? {
+        let declMetadata = decls.first(where: { (d: DeclMetadata) -> Bool in
+            return d.name == name && d.encloser == encloser && d.fullName == fullName && d.declDescription == description && d.declType == declType
         })
 
-        if contains {
+        if let d = declMetadata {
             var isModified = false
             var list = [DeclModifierSyntax]()
             var preservedTrivia: Trivia?
 
+            let targetAL = d.targetAccessLevel ?? .internal
             for modifier in modifiers {
-                if modifier.name.text == String.public || modifier.name.text == String.open {
+                let modText = modifier.name.text
+                if modText == String.public || modText == String.open || modText == "package" {
                     isModified = true
                     if preservedTrivia == nil {
                         preservedTrivia = modifier.leadingTrivia
@@ -55,6 +57,18 @@ public final class AccessLevelRewriter: SyntaxRewriter {
                     list.append(m)
                 }
             }
+            
+            if targetAL >= .package {
+                let keyword = TokenSyntax.keyword(targetAL == .open ? .open : (targetAL == .public ? .public : .package))
+                var newModifier = DeclModifierSyntax(name: keyword.with(\.trailingTrivia, .spaces(1)))
+                if let trivia = preservedTrivia {
+                    newModifier.leadingTrivia = trivia
+                    preservedTrivia = nil
+                }
+                list.insert(newModifier, at: 0)
+                isModified = true
+            }
+
             return (DeclModifierListSyntax(list), preservedTrivia, isModified)
         }
         return nil
@@ -62,6 +76,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
 
     private func updateNode<T: DeclSyntaxProtocol>(_ node: T,
                                                   name: (T) -> String,
+                                                  encloser: (T) -> String,
                                                   fullName: (T) -> String,
                                                   description: (T) -> String,
                                                   declType: (T) -> DeclType,
@@ -69,7 +84,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
                                                   withModifiers: (T, DeclModifierListSyntax) -> T,
                                                   keyword: (T) -> TokenSyntax,
                                                   withKeyword: (T, TokenSyntax) -> T) -> T {
-        if let (updatedModifier, leadingTrivia, isModified) = updateModifiers(name(node), fullName: fullName(node), description: description(node), declType: declType(node), modifiers: modifiers(node)) {
+        if let (updatedModifier, leadingTrivia, isModified) = updateModifiers(name(node), encloser: encloser(node), fullName: fullName(node), description: description(node), declType: declType(node), modifiers: modifiers(node)) {
             var updatedNode = node
             if isModified {
                 updatedNode = withModifiers(updatedNode, updatedModifier)
@@ -86,6 +101,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { _ in "" },
+                                 encloser: { _ in "" },
                                  fullName: { _ in "" },
                                  description: { $0.description },
                                  declType: { _ in .extensionType },
@@ -99,6 +115,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { _ in "" },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -112,6 +129,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: StructDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { _ in "" },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -125,6 +143,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { _ in "" },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -138,6 +157,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { _ in "" },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -151,6 +171,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { Syntax($0).encloserName },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -164,6 +185,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { Syntax($0).encloserName },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -177,6 +199,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: InitializerDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { Syntax($0).encloserName },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -190,6 +213,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { Syntax($0).encloserName },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },
@@ -203,6 +227,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     override public func visit(_ node: TypeAliasDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },
+                                 encloser: { Syntax($0).encloserName },
                                  fullName: { $0.fullName },
                                  description: { $0.description },
                                  declType: { $0.declType },

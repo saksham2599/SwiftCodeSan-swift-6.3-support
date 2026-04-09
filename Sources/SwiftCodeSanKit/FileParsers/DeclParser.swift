@@ -16,6 +16,7 @@
 
 import Foundation
 import SwiftSyntax
+import SwiftParser
 
 public class DeclParser: @unchecked Sendable {
     
@@ -25,12 +26,13 @@ public class DeclParser: @unchecked Sendable {
     public init() {}
 
     func scanAndMapDecls(fileToModuleMap: [String: String],
+                         moduleToPackageMap: [String: String]? = nil,
                          topDeclsOnly: Bool,
                          whitelist: Whitelist?) -> DeclMap {
         nonisolated(unsafe) var allDeclMap = DeclMap()
         let lock = NSLock()
 
-        scanDecls(fileToModuleMap: fileToModuleMap, topDeclsOnly: topDeclsOnly, whitelist: whitelist) { @Sendable (filepath, subResults) in
+        scanDecls(fileToModuleMap: fileToModuleMap, moduleToPackageMap: moduleToPackageMap, topDeclsOnly: topDeclsOnly, whitelist: whitelist) { @Sendable (filepath, subResults) in
             lock.lock()
             defer { lock.unlock() }
             for (k, decls) in subResults {
@@ -58,11 +60,13 @@ public class DeclParser: @unchecked Sendable {
     }
 
     func scanDecls(fileToModuleMap: [String: String],
+                   moduleToPackageMap: [String: String]? = nil,
                    topDeclsOnly: Bool,
                    completion: @Sendable @escaping (String, DeclMap) -> ()) {
         scan(fileToModuleMap) { (path: String, module: String, lock: NSLock?) in
             self.visitSrc(path: path,
                           module: module,
+                          package: moduleToPackageMap?[module],
                           topDeclsOnly: topDeclsOnly,
                           whitelist: nil,
                           lock: lock,
@@ -71,12 +75,14 @@ public class DeclParser: @unchecked Sendable {
     }
 
     func scanDecls(fileToModuleMap: [String: String],
+                   moduleToPackageMap: [String: String]? = nil,
                    topDeclsOnly: Bool,
                    whitelist: Whitelist?,
                    completion: @Sendable @escaping (String, DeclMap) -> ()) {
         scan(fileToModuleMap) { (path: String, module: String, lock: NSLock?) in
             self.visitSrc(path: path,
                           module: module,
+                          package: moduleToPackageMap?[module],
                           topDeclsOnly: topDeclsOnly,
                           whitelist: whitelist,
                           lock: lock,
@@ -86,12 +92,13 @@ public class DeclParser: @unchecked Sendable {
 
     private func visitSrc(path: String,
                           module: String?,
+                          package: String?,
                           topDeclsOnly: Bool,
                           whitelist: Whitelist?,
                           lock: NSLock?,
                           completion: @Sendable @escaping (String, DeclMap) -> ()) {
         do {
-            let node = try SyntaxParser.parse(path)
+            let node = Parser.parse(source: try String(contentsOfFile: path, encoding: .utf8))
             let whitelistPath = FileManager.modifiedWithin(whitelist?.thresholdDays, at: path)
             if whitelistPath {
                 wpaths += 1
@@ -101,7 +108,8 @@ public class DeclParser: @unchecked Sendable {
                                       module: module,
                                       topDeclsOnly: topDeclsOnly,
                                       whitelistPath: whitelistPath,
-                                      whitelist: whitelist)
+                                      whitelist: whitelist,
+                                      package: package)
             visitor.walk(node)
             
             lock?.lock()
@@ -127,7 +135,7 @@ public class DeclParser: @unchecked Sendable {
                                lock: NSLock?,
                                completion: @Sendable @escaping (String, Set<String>, [String]) -> ()) {
         do {
-            let node = try SyntaxParser.parse(path)
+            let node = Parser.parse(source: try String(contentsOfFile: path, encoding: .utf8))
             let visitor = RefChecker(path, module: module, declMap: declMap)
             visitor.walk(node)
             
@@ -151,6 +159,7 @@ public class DeclParser: @unchecked Sendable {
             scan(dirs: paths) { (path: String, lock: NSLock?) in
                 self.visitSrc(path: path,
                               module: pathToModules[path],
+                              package: nil,
                               topDeclsOnly: topDeclsOnly,
                               whitelist: whitelist,
                               lock: lock,
@@ -160,6 +169,7 @@ public class DeclParser: @unchecked Sendable {
             scan(paths) { (path: String, lock: NSLock?) in
                 self.visitSrc(path: path,
                               module: pathToModules[path],
+                              package: nil,
                               topDeclsOnly: topDeclsOnly,
                               whitelist: whitelist,
                               lock: lock,

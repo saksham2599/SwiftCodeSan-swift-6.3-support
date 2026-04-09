@@ -32,81 +32,81 @@ public final class DeclRemover: SyntaxRewriter {
     }
 
     override public func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: "", fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: "", fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: StructDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: "", fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: "", fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: "", fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: InitializerDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: TypeAliasDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: AssociatedTypeDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: EnumCaseDeclSyntax) -> DeclSyntax {
-        if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
+        if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
 
-    private func shouldRemove(_ name: String, fullName: String, description: String, declType: DeclType) -> Bool {
+    private func shouldRemove(_ name: String, encloser: String, fullName: String, description: String, declType: DeclType) -> Bool {
         let inList = decls.contains(where: { (d: DeclMetadata) -> Bool in
-            return d.name == name && d.fullName == fullName && d.declDescription == description && d.declType == declType
+            return d.name == name && d.encloser == encloser && d.fullName == fullName && d.declDescription == description && d.declType == declType
         })
         return inList
     }

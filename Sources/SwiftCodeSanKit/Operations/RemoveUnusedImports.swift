@@ -21,6 +21,20 @@ nonisolated(unsafe) private var total = 0
 nonisolated(unsafe) private var whitelistModulesBlock: @Sendable (String) -> Bool = { _ in false }
 private let unusedImportsLock = NSLock()
 
+/// A list of well-known system frameworks that should be preserved by default
+/// unless they are definitely not used (though proveing "unused" for system
+/// frameworks is hard without a full SDK index).
+private let defaultSystemFrameworks: Set<String> = [
+    "Foundation", "UIKit", "AppKit", "SwiftUI", "Combine", "XCTest",
+    "CoreData", "CoreGraphics", "CoreImage", "QuartzCore", "AVFoundation",
+    "Metal", "SceneKit", "SpriteKit", "ARKit", "MapKit", "Contacts",
+    "AddressBook", "EventKit", "HealthKit", "HomeKit", "CloudKit",
+    "PassKit", "Photos", "MediaPlayer", "AddressBookUI", "WebKit",
+    "CoreLocation", "CoreMotion", "CoreBluetooth", "ExternalAccessory",
+    "NetworkExtension", "QuickLook", "SafariServices", "Social",
+    "Accounts", "UserNotifications", "VideoToolbox", "AudioToolbox"
+]
+
 public func removeUnusedImports(fileToModuleMap: [String: String],
                                 whitelist: Whitelist?,
                                 topDeclsOnly: Bool,
@@ -44,6 +58,14 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
     total = 0
 
     whitelistModulesBlock = { (module: String) -> Bool in
+        let m = module.trimmed
+        print("Checking module: '\(m)' against whitelist")
+        // Protect default system frameworks
+        if defaultSystemFrameworks.contains(m) {
+            print("Found in whitelist: \(m)")
+            return true
+        }
+
         let moduleComps = module.components(separatedBy: ".").filter {!$0.isEmpty}
         for comp in moduleComps {
             if let list = whitelist?.modules, list.contains(comp) {
@@ -90,9 +112,19 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
                         }
                     }
                 }
-            } else if imports.contains(r) {
-                // Sometimes a module name can be used in code, e.g. CoreFoundation.Foo
-                usedImportsInFile[r] = true
+            } else {
+                // Unknown symbol: could be a system type or a qualified name
+                // Case 1: Qualified name (e.g. Foundation.Date)
+                for i in imports {
+                    if r.hasPrefix("\(i).") {
+                        usedImportsInFile[i] = true
+                    }
+                }
+
+                // Case 2: Exact match for a module name (e.g. usage of Foundation)
+                if imports.contains(r) {
+                    usedImportsInFile[r] = true
+                }
             }
         }
 
@@ -108,11 +140,9 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
 
         if !unusedListInFile.isEmpty {
             unusedImportsLock.lock()
-            unusedImports[filepath] = Set(unusedListInFile).compactMap{$0}
+            unusedImports[filepath] = Array(Set(unusedListInFile))
             unusedImportsLock.unlock()
         }
-
-//        log(total, interval: 200)
     }
 
     logTime()

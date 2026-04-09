@@ -40,7 +40,7 @@ final class RefChecker: SyntaxVisitor {
 
     override func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
         if node.item.is(ExprSyntax.self) || node.item.is(StmtSyntax.self) {
-            reflist.append(contentsOf: node.item.referencedTypes(with: declMap))
+            reflist.append(contentsOf: node.item.referencedTypes(with: declMap, allowUnknown: true))
             return .skipChildren
         }
 
@@ -48,7 +48,7 @@ final class RefChecker: SyntaxVisitor {
     }
 
     override func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         if node.isOverride {
             reflist.append(node.name)
         }
@@ -57,7 +57,7 @@ final class RefChecker: SyntaxVisitor {
     }
 
     override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         if node.isOverride {
             reflist.append(node.name)
         }
@@ -65,12 +65,12 @@ final class RefChecker: SyntaxVisitor {
     }
 
     override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
 
     override func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         if node.isOverride {
             reflist.append(node.name)
         }
@@ -78,39 +78,39 @@ final class RefChecker: SyntaxVisitor {
     }
 
     override func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
-         reflist.append(contentsOf: node.referencedTypes(with: declMap))
+         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
          return .visitChildren
      }
 
     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
     override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         reflist.append(node.name)
         return .visitChildren
     }
     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
     override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
 
     override func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
 
     override func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap))
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
 

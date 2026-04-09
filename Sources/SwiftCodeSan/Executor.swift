@@ -44,6 +44,11 @@ struct Executor: ParsableCommand {
             help: "File paths each containing a map of source files and corresponding module names.",
             completion: .file())
     private var fileLists: [String] = []
+    @Option(name: .customLong("modules-to-packages"),
+            parsing: .upToNextOption,
+            help: "File paths each containing a map of module names and corresponding package names.",
+            completion: .file())
+    private var packageLists: [String] = []
     @Option(name: .customLong("syslib-list"),
             parsing: .upToNextOption,
             help: "File paths each containing a list of (weak) system frameworks.",
@@ -140,6 +145,14 @@ struct Executor: ParsableCommand {
                 filesToModules[key] = val
             }
         }
+
+        var modulesToPackages = [String: String]()
+        packageLists.forEach { arg in
+            let line = arg.components(separatedBy: ":")
+            if let key = line.first, let val = line.last {
+                modulesToPackages[key] = val
+            }
+        }
         
         let whitelist = Whitelist(thresholdDays: thresholdDays,
                                   decls: whitelistDecls,
@@ -152,6 +165,7 @@ struct Executor: ParsableCommand {
                                   members: whitelistMembers)
 
         execute(with: filesToModules,
+                modulesToPackages,
                 nil,
                 root,
                 logFilePath,
@@ -164,6 +178,7 @@ struct Executor: ParsableCommand {
     }
 
     private func execute(with filesToModules: [String: String],
+                          _ modulesToPackages: [String: String]?,
                           _ testfiles: [String]?,
                           _ root: String?,
                           _ logfile: String?,
@@ -190,6 +205,7 @@ struct Executor: ParsableCommand {
         // Then update access levels
         if updateAccessLevels {
             SwiftCodeSanKit.updateAccessLevels(filesToModules: filesToModules,
+                                               modulesToPackages: modulesToPackages,
                                                whitelist: whitelist,
                                                inplace: inplace,
                                                concurrencyLimit: jobs,

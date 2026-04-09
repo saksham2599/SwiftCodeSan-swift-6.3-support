@@ -31,15 +31,33 @@ public enum DeclType {
 }
 
 extension DeclType {
-    var isEncloserType: Bool {
-        if self == .protocolType ||
-            self == .classType ||
-            self == .extensionType ||
-            self == .structType ||
-            self == .enumType {
-            return true
+}
+ 
+public enum AccessLevel: Int, Comparable, Sendable {
+    case `private` = 0
+    case `fileprivate` = 1
+    case `internal` = 2
+    case `package` = 3
+    case `public` = 4
+    case `open` = 5
+
+    public static func < (lhs: AccessLevel, rhs: AccessLevel) -> Bool {
+        return lhs.rawValue < rhs.rawValue
+    }
+
+    public var isPublicOrOpen: Bool {
+        return self == .public || self == .open
+    }
+
+    public var keyword: String {
+        switch self {
+        case .private: return "private"
+        case .fileprivate: return "fileprivate"
+        case .internal: return "internal"
+        case .package: return "package"
+        case .public: return "public"
+        case .open: return "open"
         }
-        return false
     }
 }
 
@@ -55,6 +73,7 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
 
     let path: String
     let module: String
+    var package: String?
     let imports: [String]
     var encloser: String
     var declDescription: String
@@ -62,10 +81,24 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
 
     var isOverride: Bool
     var isExtensionMember: Bool = false
-    var isPublicOrOpen: Bool
+    var accessLevel: AccessLevel
+    var targetAccessLevel: AccessLevel?
     var shouldExpose: Bool = false
     var visited: Bool = false
     var used: Bool = false
+
+    public var isPublicOrOpen: Bool {
+        return accessLevel.isPublicOrOpen
+    }
+
+    @discardableResult
+    func updateTargetAccessLevel(to newLevel: AccessLevel) -> Bool {
+        if targetAccessLevel == nil || newLevel > targetAccessLevel! {
+            targetAccessLevel = newLevel
+            return true
+        }
+        return false
+    }
 
     public func hash(into hasher: inout Hasher) {
         hasher.combine(fullName)
@@ -90,6 +123,7 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
 
     public init(path: String,
                 module: String,
+                package: String? = nil,
                 imports: [String],
                 encloser: String,
                 name: String,
@@ -100,12 +134,13 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
                 inheritedTypes: [String],
                 boundTypes: [String],
                 boundTypesAL: [String],
-                isPublicOrOpen: Bool,
+                accessLevel: AccessLevel,
                 isOverride: Bool,
                 annotated: Bool = false,
                 used: Bool) {
         self.path = path
         self.module = module
+        self.package = package
         self.imports = imports
         self.encloser = encloser
         self.name = name
@@ -117,7 +152,7 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
         self.boundTypes = boundTypes
         self.boundTypesAL = boundTypesAL
         self.annotated = annotated
-        self.isPublicOrOpen = isPublicOrOpen
+        self.accessLevel = accessLevel
         self.isOverride = isOverride
     }
 }
