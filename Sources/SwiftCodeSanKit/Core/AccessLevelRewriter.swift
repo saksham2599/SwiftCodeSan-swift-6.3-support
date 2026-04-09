@@ -30,7 +30,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
         self.decls = decls
     }
 
-    private func updateModifiers(_ name: String, fullName: String, description: String, declType: DeclType, modifiers: DeclModifierListSyntax) -> (DeclModifierListSyntax, Bool)? {
+    private func updateModifiers(_ name: String, fullName: String, description: String, declType: DeclType, modifiers: DeclModifierListSyntax) -> (updated: DeclModifierListSyntax, leadingTrivia: Trivia?, isModified: Bool)? {
         let contains = decls.contains(where: { (d: DeclMetadata) -> Bool in
             return d.name == name && d.fullName == fullName && d.declDescription == description && d.declType == declType
         })
@@ -38,135 +38,178 @@ public final class AccessLevelRewriter: SyntaxRewriter {
         if contains {
             var isModified = false
             var list = [DeclModifierSyntax]()
+            var preservedTrivia: Trivia?
 
             for modifier in modifiers {
                 if modifier.name.text == String.public || modifier.name.text == String.open {
                     isModified = true
-                    // By not adding it to the list, we effectively change it to internal
-                } else {
-                    if isModified, modifier.name.text == String.internal, modifier.detail?.detail.text == "set" {
-                        // Keep it but maybe it was public(set)?
-                        list.append(modifier)
-                    } else {
-                        list.append(modifier)
+                    if preservedTrivia == nil {
+                        preservedTrivia = modifier.leadingTrivia
                     }
+                } else {
+                    var m = modifier
+                    if let trivia = preservedTrivia {
+                        m.leadingTrivia = trivia + m.leadingTrivia
+                        preservedTrivia = nil
+                    }
+                    list.append(m)
                 }
             }
-            return (DeclModifierListSyntax(list), isModified)
+            return (DeclModifierListSyntax(list), preservedTrivia, isModified)
         }
         return nil
     }
 
-    override public func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
+    private func updateNode<T: DeclSyntaxProtocol>(_ node: T,
+                                                  name: (T) -> String,
+                                                  fullName: (T) -> String,
+                                                  description: (T) -> String,
+                                                  declType: (T) -> DeclType,
+                                                  modifiers: (T) -> DeclModifierListSyntax,
+                                                  withModifiers: (T, DeclModifierListSyntax) -> T,
+                                                  keyword: (T) -> TokenSyntax,
+                                                  withKeyword: (T, TokenSyntax) -> T) -> T {
+        if let (updatedModifier, leadingTrivia, isModified) = updateModifiers(name(node), fullName: fullName(node), description: description(node), declType: declType(node), modifiers: modifiers(node)) {
+            var updatedNode = node
             if isModified {
-                mutableNode.modifiers = updatedModifier
+                updatedNode = withModifiers(updatedNode, updatedModifier)
+                if let trivia = leadingTrivia {
+                    let k = keyword(updatedNode)
+                    updatedNode = withKeyword(updatedNode, k.with(\.leadingTrivia, trivia + k.leadingTrivia))
+                }
             }
-            return DeclSyntax(mutableNode)
+            return updatedNode
         }
-        return super.visit(node)
+        return node
+    }
+
+    override public func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
+        let updated = updateNode(node,
+                                 name: { _ in "" },
+                                 fullName: { _ in "" },
+                                 description: { $0.description },
+                                 declType: { _ in .extensionType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.extensionKeyword },
+                                 withKeyword: { $0.with(\.extensionKeyword, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-            return DeclSyntax(mutableNode)
-        }
-
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.enumKeyword },
+                                 withKeyword: { $0.with(\.enumKeyword, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: StructDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-
-            return DeclSyntax(mutableNode)
-        }
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.structKeyword },
+                                 withKeyword: { $0.with(\.structKeyword, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-            return DeclSyntax(mutableNode)
-        }
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.protocolKeyword },
+                                 withKeyword: { $0.with(\.protocolKeyword, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-
-            return DeclSyntax(mutableNode)
-        }
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.classKeyword },
+                                 withKeyword: { $0.with(\.classKeyword, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-            return DeclSyntax(mutableNode)
-        }
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.funcKeyword },
+                                 withKeyword: { $0.with(\.funcKeyword, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-            return DeclSyntax(mutableNode)
-        }
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.subscriptKeyword },
+                                 withKeyword: { $0.with(\.subscriptKeyword, $1) })
+        return super.visit(updated)
     }
     
     override public func visit(_ node: InitializerDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-            return DeclSyntax(mutableNode)
-        }
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.initKeyword },
+                                 withKeyword: { $0.with(\.initKeyword, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
-        var mutableNode = node
-        if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-            if isModified {
-                mutableNode.modifiers = updatedModifier
-            }
-            return DeclSyntax(mutableNode)
-        }
-        return super.visit(node)
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.bindingSpecifier },
+                                 withKeyword: { $0.with(\.bindingSpecifier, $1) })
+        return super.visit(updated)
     }
 
     override public func visit(_ node: TypeAliasDeclSyntax) -> DeclSyntax {
-           var mutableNode = node
-           if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
-               if isModified {
-                   mutableNode.modifiers = updatedModifier
-               }
-               return DeclSyntax(mutableNode)
-           }
-           return super.visit(node)
-       }
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.typealiasKeyword },
+                                 withKeyword: { $0.with(\.typealiasKeyword, $1) })
+        return super.visit(updated)
+    }
 }
