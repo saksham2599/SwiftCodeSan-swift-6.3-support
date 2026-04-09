@@ -17,13 +17,12 @@
 
 import Foundation
 import SwiftSyntax
-import SwiftSyntaxParser
 
-final class DeclUpdater {
+final class DeclUpdater: @unchecked Sendable {
 
     func updateAccessLevels(filesToDecls: [String: [DeclMetadata]],
                             filesToModules: [String: String],
-                            completion: @escaping (String, String) -> ()) {
+                            completion: @Sendable @escaping (String, String) -> ()) {
 
         scan(filesToDecls) { (path, decls, lock) in
             do {
@@ -40,7 +39,7 @@ final class DeclUpdater {
     }
 
     func removeDeadDecls(filesToDecls: [String: [DeclMetadata]],
-                         completion: @escaping (String, String) -> ()) {
+                         completion: @Sendable @escaping (String, String) -> ()) {
         scan(filesToDecls) { (path, decls, lock) in
             do {
                 let node = try SyntaxParser.parse(path)
@@ -59,7 +58,7 @@ final class DeclUpdater {
     func removeUnusedImports(paths: [String],
                              isDirs: Bool,
                              unusedImports: [String: [String]],
-                             completion: @escaping (String, String) -> ()) {
+                             completion: @Sendable @escaping (String, String) -> ()) {
         if isDirs {
             scan(dirs: paths) { (path, lock) in
                 self.updateSrcs(path: path, module: "", lock: lock, unusedImports: unusedImports, completion: completion)
@@ -73,7 +72,7 @@ final class DeclUpdater {
 
     func removeUnusedImports(fileToModuleMap: [String: String],
                              unusedImports: [String: [String]],
-                             completion: @escaping (String, String) -> ()) {
+                             completion: @Sendable @escaping (String, String) -> ()) {
         scan(fileToModuleMap) { (path, module, lock) in
             self.updateSrcs(path: path, module: module, lock: lock, unusedImports: unusedImports, completion: completion)
         }
@@ -83,7 +82,7 @@ final class DeclUpdater {
                             module: String,
                             lock: NSLock?,
                             unusedImports: [String: [String]],
-                            completion: @escaping (String, String) -> ()) {
+                            completion: @Sendable @escaping (String, String) -> ()) {
         do {
             let node = try SyntaxParser.parse(path)
             let remover = ImportRewriter(path, unusedModules: unusedImports[path])

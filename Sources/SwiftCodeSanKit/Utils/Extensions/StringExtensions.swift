@@ -16,7 +16,7 @@
 
 import Foundation
 
-var alphanumericSet = CharacterSet.alphanumerics
+nonisolated(unsafe) var alphanumericSet = CharacterSet.alphanumerics
 
 extension String {
     static public let `final` = "final"

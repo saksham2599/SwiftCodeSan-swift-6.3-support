@@ -19,7 +19,7 @@ import ArgumentParser
 import SwiftCodeSanKit
 
 struct Executor: ParsableCommand {
-    static var configuration = CommandConfiguration(commandName: "SwiftCodeSan", abstract: "SwiftCodeSan: Code Sanitizer for Swift.")
+    static let configuration = CommandConfiguration(commandName: "SwiftCodeSan", abstract: "SwiftCodeSan: Code Sanitizer for Swift.")
 
     private enum Operation: EnumerableFlag {
         case removeDeadcode

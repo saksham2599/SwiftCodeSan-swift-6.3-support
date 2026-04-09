@@ -16,12 +16,14 @@
 
 import Foundation
 
+nonisolated(unsafe) private var nref = 0
+
 public func updateAccessLevels(filesToModules: [String: String],
                                whitelist: Whitelist?,
                                inplace: Bool,
                                logFilePath: String? = nil,
                                concurrencyLimit: Int? = nil,
-                               onCompletion: @escaping () -> ()) {
+                               onCompletion: @Sendable @escaping () -> ()) {
     
     scanConcurrencyLimit = concurrencyLimit
     let p = DeclParser()
@@ -36,7 +38,7 @@ public func updateAccessLevels(filesToModules: [String: String],
     logTime()
     
     log("Check references, look up their source modules, and mark visibility...")
-    p.checkRefs(fileToModuleMap: filesToModules, declMap: declMap) { (path, refs, imports) in
+    p.checkRefs(fileToModuleMap: filesToModules, declMap: declMap) { @Sendable (path, refs, imports) in
         if let refModule = filesToModules[path] {
             markVisiblity(refs, in: refModule, imports: imports, with: declMap, updateMembers: true)
         }
@@ -54,9 +56,9 @@ public func updateAccessLevels(filesToModules: [String: String],
     logTime()
     
     log("Flatten decls, and check references again, for member decls...")
-    var nref = 0
+    nref = 0
     let flatDeclMap = flatten(declMap: declMap)
-    p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { (path, refs, imports) in
+    p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { @Sendable (path, refs, imports) in
         if let refModule = filesToModules[path] {
             markVisiblity(refs, in: refModule, imports: imports, with: flatDeclMap, updateMembers: false)
         }
@@ -107,7 +109,7 @@ public func updateAccessLevels(filesToModules: [String: String],
     if inplace {
         log("Update decl ALs in files...")
         let updater  = DeclUpdater()
-        updater.updateAccessLevels(filesToDecls: pathToDeclsUpdate, filesToModules: filesToModules) { (path, content) in
+        updater.updateAccessLevels(filesToDecls: pathToDeclsUpdate, filesToModules: filesToModules) { @Sendable (path, content) in
             try? content.write(toFile: path, atomically: true, encoding: .utf8)
         }
     }

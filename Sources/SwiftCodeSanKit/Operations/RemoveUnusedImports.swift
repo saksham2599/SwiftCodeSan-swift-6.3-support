@@ -16,6 +16,11 @@
 
 import Foundation
 
+nonisolated(unsafe) private var unusedImports = [String: [String]]()
+nonisolated(unsafe) private var total = 0
+nonisolated(unsafe) private var whitelistModulesBlock: @Sendable (String) -> Bool = { _ in false }
+private let unusedImportsLock = NSLock()
+
 public func removeUnusedImports(fileToModuleMap: [String: String],
                                 whitelist: Whitelist?,
                                 topDeclsOnly: Bool,
@@ -35,9 +40,10 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
     logTime()
     log("#Decls", allDeclMap.keys.count)
 
-    var unusedImports = [String: [String]]()
+    unusedImports = [String: [String]]()
+    total = 0
 
-    let whitelistModulesBlock = { (module: String) -> Bool in
+    whitelistModulesBlock = { (module: String) -> Bool in
         let moduleComps = module.components(separatedBy: ".").filter {!$0.isEmpty}
         for comp in moduleComps {
             if let list = whitelist?.modules, list.contains(comp) {
@@ -62,8 +68,7 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
     }
 
     log("Check referenced decls and compare their source modules against imported modules to filter out unused imports...")
-    var total = 0
-    p.checkRefs(fileToModuleMap: fileToModuleMap, declMap: allDeclMap) { (filepath, refs, imports) in
+    p.checkRefs(fileToModuleMap: fileToModuleMap, declMap: allDeclMap) { @Sendable (filepath, refs, imports) in
         var usedImportsInFile = [String: Bool]()
         for i in imports {
             usedImportsInFile[i] = whitelistModulesBlock(i)
@@ -94,13 +99,17 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
         var unusedListInFile = [String]()
         for (module, used) in usedImportsInFile {
             if !used {
+                unusedImportsLock.lock()
                 total += 1
                 unusedListInFile.append(module)
+                unusedImportsLock.unlock()
             }
         }
 
         if !unusedListInFile.isEmpty {
+            unusedImportsLock.lock()
             unusedImports[filepath] = Set(unusedListInFile).compactMap{$0}
+            unusedImportsLock.unlock()
         }
 
 //        log(total, interval: 200)

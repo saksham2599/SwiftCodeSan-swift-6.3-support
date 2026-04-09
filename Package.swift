@@ -1,4 +1,4 @@
-// swift-tools-version:5.2
+// swift-tools-version:6.0
 import PackageDescription
 
 let package = Package(
@@ -11,8 +11,8 @@ let package = Package(
         .library(name: "SwiftCodeSanKit", targets: ["SwiftCodeSanKit"]),
         ],
     dependencies: [
-        .package(url: "https://github.com/apple/swift-argument-parser", .upToNextMinor(from: "1.0.2")),
-        .package(name: "SwiftSyntax", url: "https://github.com/apple/swift-syntax.git", .branch("swift-5.6-RELEASE"))
+        .package(url: "https://github.com/apple/swift-argument-parser", from: "1.5.0"),
+        .package(url: "https://github.com/apple/swift-syntax.git", from: "603.0.0")
     ],
     targets: [ 
         .target(
@@ -24,8 +24,8 @@ let package = Package(
         .target(
             name: "SwiftCodeSanKit",
             dependencies: [
-                .product(name: "SwiftSyntax", package: "SwiftSyntax"),
-                .product(name: "SwiftSyntaxParser", package: "SwiftSyntax"),
+                .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftParser", package: "swift-syntax"),
             ]
         ),
         .testTarget(

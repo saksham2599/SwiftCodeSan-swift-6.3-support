@@ -16,18 +16,23 @@
 
 import Foundation
 import SwiftSyntax
-import SwiftSyntaxParser
 
-public class DeclParser {
+public class DeclParser: @unchecked Sendable {
+    
+    nonisolated(unsafe) var wpaths = 0
+    nonisolated(unsafe) var npaths = 0
     
     public init() {}
 
     func scanAndMapDecls(fileToModuleMap: [String: String],
                          topDeclsOnly: Bool,
                          whitelist: Whitelist?) -> DeclMap {
-        var allDeclMap = DeclMap()
+        nonisolated(unsafe) var allDeclMap = DeclMap()
+        let lock = NSLock()
 
-        scanDecls(fileToModuleMap: fileToModuleMap, topDeclsOnly: topDeclsOnly, whitelist: whitelist) { (filepath, subResults) in
+        scanDecls(fileToModuleMap: fileToModuleMap, topDeclsOnly: topDeclsOnly, whitelist: whitelist) { @Sendable (filepath, subResults) in
+            lock.lock()
+            defer { lock.unlock() }
             for (k, decls) in subResults {
                 if allDeclMap[k] == nil {
                     allDeclMap[k] = []
@@ -54,7 +59,7 @@ public class DeclParser {
 
     func scanDecls(fileToModuleMap: [String: String],
                    topDeclsOnly: Bool,
-                   completion: @escaping (String, DeclMap) -> ()) {
+                   completion: @Sendable @escaping (String, DeclMap) -> ()) {
         scan(fileToModuleMap) { (path: String, module: String, lock: NSLock?) in
             self.visitSrc(path: path,
                           module: module,
@@ -68,7 +73,7 @@ public class DeclParser {
     func scanDecls(fileToModuleMap: [String: String],
                    topDeclsOnly: Bool,
                    whitelist: Whitelist?,
-                   completion: @escaping (String, DeclMap) -> ()) {
+                   completion: @Sendable @escaping (String, DeclMap) -> ()) {
         scan(fileToModuleMap) { (path: String, module: String, lock: NSLock?) in
             self.visitSrc(path: path,
                           module: module,
@@ -79,14 +84,12 @@ public class DeclParser {
         }
     }
 
-    var wpaths = 0
-    var npaths = 0
     private func visitSrc(path: String,
                           module: String?,
                           topDeclsOnly: Bool,
                           whitelist: Whitelist?,
                           lock: NSLock?,
-                          completion: @escaping (String, DeclMap) -> ()) {
+                          completion: @Sendable @escaping (String, DeclMap) -> ()) {
         do {
             let node = try SyntaxParser.parse(path)
             let whitelistPath = FileManager.modifiedWithin(whitelist?.thresholdDays, at: path)
@@ -111,7 +114,7 @@ public class DeclParser {
 
     func checkRefs(fileToModuleMap: [String: String],
                    declMap: DeclMap,
-                   completion: @escaping (String, Set<String>, [String]) -> ()) {
+                   completion: @Sendable @escaping (String, Set<String>, [String]) -> ()) {
 
         scan(fileToModuleMap) { (path: String, module: String, lock: NSLock?) in
             self.referenceSrc(path: path, module: module, declMap: declMap, lock: lock, completion: completion)
@@ -119,10 +122,10 @@ public class DeclParser {
     }
 
     private func referenceSrc(path: String,
-                              module: String,
-                              declMap: DeclMap,
-                              lock: NSLock?,
-                              completion: @escaping (String, Set<String>, [String]) -> ()) {
+                               module: String,
+                               declMap: DeclMap,
+                               lock: NSLock?,
+                               completion: @Sendable @escaping (String, Set<String>, [String]) -> ()) {
         do {
             let node = try SyntaxParser.parse(path)
             let visitor = RefChecker(path, module: module, declMap: declMap)
@@ -143,7 +146,7 @@ public class DeclParser {
                    topDeclsOnly: Bool,
                    pathToModules: [String: String],
                    whitelist: Whitelist?,
-                   completion: @escaping (String, DeclMap) -> ()) {
+                   completion: @Sendable @escaping (String, DeclMap) -> ()) {
         if isDirs {
             scan(dirs: paths) { (path: String, lock: NSLock?) in
                 self.visitSrc(path: path,
@@ -170,7 +173,7 @@ public class DeclParser {
                    isDirs: Bool,
                    pathToModules: [String: String],
                    declMap: DeclMap,
-                   completion: @escaping (String, Set<String>, [String]) -> ()) {
+                   completion: @Sendable @escaping (String, Set<String>, [String]) -> ()) {
 
         if isDirs {
             scan(dirs: paths) { (path: String, lock: NSLock?) in

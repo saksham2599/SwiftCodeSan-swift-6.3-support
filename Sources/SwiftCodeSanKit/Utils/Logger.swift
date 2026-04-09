@@ -18,10 +18,10 @@ import Foundation
 import os.signpost
 
 fileprivate let perfLog = OSLog(subsystem: "SwiftCodeSan", category: "PointsOfInterest")
-fileprivate var prevTime: CFAbsoluteTime?
-fileprivate var startTime: CFAbsoluteTime?
+nonisolated(unsafe) fileprivate var prevTime: CFAbsoluteTime?
+nonisolated(unsafe) fileprivate var startTime: CFAbsoluteTime?
 
-public var minLogLevel = 0
+nonisolated(unsafe) public var minLogLevel = 0
 
 /// Logs status and other messages depending on the level provided
 public enum LogLevel: Int {

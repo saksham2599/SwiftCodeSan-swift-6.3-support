@@ -43,7 +43,7 @@ extension DeclType {
     }
 }
 
-public final class DeclMetadata: Hashable {
+public final class DeclMetadata: Hashable, @unchecked Sendable {
     let name: String
     var type: String
     let fullName: String
@@ -129,7 +129,7 @@ struct AnnotationMetadata {
 }
 
 
-public struct Whitelist {
+public struct Whitelist: Sendable {
     public let thresholdDays: Int?
     public let decls: [String]?
     public let declsPrefix: [String]?

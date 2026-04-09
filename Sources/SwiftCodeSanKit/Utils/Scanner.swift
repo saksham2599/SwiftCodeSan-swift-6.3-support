@@ -16,7 +16,7 @@
 
 import Foundation
 
-public var scanConcurrencyLimit: Int? = nil
+nonisolated(unsafe) public var scanConcurrencyLimit: Int? = nil
 
 func semaphore(_ numThreads: Int?) -> DispatchSemaphore? {
     let limit = concurrencyLimit(numThreads)
@@ -48,7 +48,7 @@ func concurrencyLimit(_ numThreads: Int?) -> Int {
 public func scan(_ paths: [String],
                  isDirectory: Bool,
                  numThreads: Int? = nil,
-                 block: @escaping (_ path: String, _ lock: NSLock?) -> ()) {
+                 block: @Sendable @escaping (_ path: String, _ lock: NSLock?) -> ()) {
     if isDirectory {
         scan(dirs: paths, block: block)
     } else {
@@ -58,7 +58,7 @@ public func scan(_ paths: [String],
 
 public func scan(dirs: [String],
                  numThreads: Int? = nil,
-                 block: @escaping (_ path: String, _ lock: NSLock?) -> ()) {
+                 block: @Sendable @escaping (_ path: String, _ lock: NSLock?) -> ()) {
     
     if let queue = queue(numThreads) {
         let sema = semaphore(numThreads)
@@ -79,9 +79,9 @@ public func scan(dirs: [String],
     }
 }
 
-public func scan<T>(_ elements: [T],
+public func scan<T: Sendable>(_ elements: [T],
                     numThreads: Int? = nil,
-                    block: @escaping (T, NSLock?) -> ()) {
+                    block: @Sendable @escaping (T, NSLock?) -> ()) {
     
     if let queue = queue(numThreads) {
         let sema = semaphore(numThreads)
@@ -101,9 +101,9 @@ public func scan<T>(_ elements: [T],
     }
 }
 
-public func scan<T, U>(_ elements: [T: U],
+public func scan<T: Sendable, U: Sendable>(_ elements: [T: U],
                        numThreads: Int? = nil,
-                       block: @escaping (T, U, NSLock?) -> ()) {
+                       block: @Sendable @escaping (T, U, NSLock?) -> ()) {
     
     if let queue = queue(numThreads) {
         let sema = semaphore(numThreads)

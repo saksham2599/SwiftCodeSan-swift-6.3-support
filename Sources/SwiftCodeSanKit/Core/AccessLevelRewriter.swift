@@ -30,7 +30,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
         self.decls = decls
     }
 
-    private func updateModifiers(_ name: String, fullName: String, description: String, declType: DeclType, modifiers: ModifierListSyntax?) -> (ModifierListSyntax, Bool)? {
+    private func updateModifiers(_ name: String, fullName: String, description: String, declType: DeclType, modifiers: DeclModifierListSyntax) -> (DeclModifierListSyntax, Bool)? {
         let contains = decls.contains(where: { (d: DeclMetadata) -> Bool in
             return d.name == name && d.fullName == fullName && d.declDescription == description && d.declType == declType
         })
@@ -38,27 +38,21 @@ public final class AccessLevelRewriter: SyntaxRewriter {
         if contains {
             var isModified = false
             var list = [DeclModifierSyntax]()
-            if let modifiers = modifiers {
 
-                for modifier in modifiers {
-                    if modifier.name.text == String.public || modifier.name.text == String.open {
-                        let updatedAcl = modifier.name.withKind(.stringLiteral("")).withoutTrailingTrivia()
-                        let updatedModifier = SyntaxFactory.makeDeclModifier(name: updatedAcl, detailLeftParen: modifier.detailLeftParen, detail: modifier.detail, detailRightParen: modifier.detailRightParen)
-                        isModified = true
-                        list.append(updatedModifier)
+            for modifier in modifiers {
+                if modifier.name.text == String.public || modifier.name.text == String.open {
+                    isModified = true
+                    // By not adding it to the list, we effectively change it to internal
+                } else {
+                    if isModified, modifier.name.text == String.internal, modifier.detail?.detail.text == "set" {
+                        // Keep it but maybe it was public(set)?
+                        list.append(modifier)
                     } else {
-
-                        if isModified, modifier.name.text == String.internal, modifier.detail?.text == "set" {
-                            let updatedAcl = modifier.name.withKind(.stringLiteral("")).withoutTrailingTrivia()
-                            let updatedModifier = SyntaxFactory.makeDeclModifier(name: updatedAcl, detailLeftParen: nil, detail: nil, detailRightParen: nil)
-                            list.append(updatedModifier)
-                        } else {
-                            list.append(modifier)
-                        }
+                        list.append(modifier)
                     }
                 }
             }
-            return (SyntaxFactory.makeModifierList(list), isModified)
+            return (DeclModifierListSyntax(list), isModified)
         }
         return nil
     }
@@ -165,7 +159,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
         return super.visit(node)
     }
 
-    override public func visit(_ node: TypealiasDeclSyntax) -> DeclSyntax {
+    override public func visit(_ node: TypeAliasDeclSyntax) -> DeclSyntax {
            var mutableNode = node
            if let (updatedModifier, isModified) = updateModifiers(node.name, fullName: node.fullName, description: node.description, declType: node.declType, modifiers: node.modifiers) {
                if isModified {

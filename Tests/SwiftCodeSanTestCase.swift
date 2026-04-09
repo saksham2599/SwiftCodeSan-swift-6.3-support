@@ -1,7 +1,7 @@
 import XCTest
 import SwiftCodeSanKit
 
-class SwiftCodeSanTestCase: XCTestCase {
+class SwiftCodeSanTestCase: XCTestCase, @unchecked Sendable {
     var srcFilePathsCount = 1
     var mockFilePathsCount = 1
     

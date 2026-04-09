@@ -40,11 +40,12 @@ final class DeclVisitor: SyntaxVisitor {
         self.path = path
         self.module = module ?? ""
         self.topDeclsOnly = topDeclsOnly
+        super.init(viewMode: .all)
     }
 
 
     override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
-        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.members.members)
+        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .skipChildren
     }
 
@@ -53,7 +54,7 @@ final class DeclVisitor: SyntaxVisitor {
             return .skipChildren
         }
 
-        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.members.members)
+        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .visitChildren
     }
     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
@@ -61,15 +62,15 @@ final class DeclVisitor: SyntaxVisitor {
             return .skipChildren
         }
 
-        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.members.members)
+        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .skipChildren
     }
     override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.members.members)
+        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .skipChildren
     }
     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
-        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.members.members)
+        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .skipChildren
     }
     override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
@@ -86,7 +87,7 @@ final class DeclVisitor: SyntaxVisitor {
         } else if let item = node.item.as(VariableDeclSyntax.self) {
             updateDecl(item, description: item.description, members: nil)
             return .skipChildren
-        } else if let item = node.item.as(TypealiasDeclSyntax.self) {
+        } else if let item = node.item.as(TypeAliasDeclSyntax.self) {
             updateDecl(item, description: item.description, members: nil)
             return .skipChildren
         }
@@ -117,7 +118,7 @@ final class DeclVisitor: SyntaxVisitor {
         return mdecls
     }
 
-    private func updateDecl(_ item: DeclProtocol, description: String, members: MemberDeclListSyntax?) {
+    private func updateDecl(_ item: DeclProtocol, description: String, members: MemberBlockItemListSyntax?) {
         let decls = item.declMetadatas(path: path, module: module, encloser: "", description: description, imports: importedModules)
 
         for decl in decls {
@@ -141,7 +142,7 @@ final class DeclVisitor: SyntaxVisitor {
                 for m in members {
                     if let ifconfig = m.decl.as(IfConfigDeclSyntax.self) {
                         for clause in ifconfig.clauses {
-                            if let clauseMembers = clause.elements.as(MemberDeclListSyntax.self) {
+                            if let elements = clause.elements, let clauseMembers = elements.as(MemberBlockItemListSyntax.self) {
                                 for el in clauseMembers {
                                     let mdecls = memberDecls(el.decl, encloser: decl.name, encloserDeclType: decl.declType, encloserWhitelisted: shouldWhitelist)
                                     list.append(contentsOf: mdecls)

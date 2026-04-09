@@ -18,6 +18,7 @@ import Foundation
 import SwiftSyntax
 
 
+
 /**
 Updates import statements in source code
 */
@@ -35,7 +36,7 @@ public final class ImportRewriter: SyntaxRewriter {
         if unused.contains(str) {
             remove = true
         } else {
-            for t in node.path.tokens {
+            for t in node.path.tokens(viewMode: .all) {
                 if unused.contains(t.text) {
                     remove = true
                 }
@@ -43,14 +44,7 @@ public final class ImportRewriter: SyntaxRewriter {
         }
 
         if remove {
-            if let trivia = node.importTok.leadingTrivia {
-                let t = SyntaxFactory.makeUnknown("", leadingTrivia: trivia, trailingTrivia: Trivia(pieces: []))
-                let ret = SyntaxFactory.makeImportDecl(attributes: nil, modifiers: nil, importTok: t, importKind: nil, path: SyntaxFactory.makeAccessPath([]))
-                return DeclSyntax(ret)
-            } else {
-                let ret = SyntaxFactory.makeBlankImportDecl()
-                return DeclSyntax(ret)
-            }
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
 
         return super.visit(node)

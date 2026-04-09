@@ -18,6 +18,20 @@
 import Foundation
 import SwiftSyntax
 
+extension CodeBlockItemSyntax.Item {
+    func referencedTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
+        switch self {
+        case .expr(let expr):
+            return Syntax(expr).referencedTypes(with: declMap, filterKey: filterKey)
+        case .decl(let decl):
+            return Syntax(decl).referencedTypes(with: declMap, filterKey: filterKey)
+        case .stmt(let stmt):
+            return Syntax(stmt).referencedTypes(with: declMap, filterKey: filterKey)
+        @unknown default:
+            return []
+        }
+    }
+}
 
 protocol DeclProtocol {
     var type: String { get }
@@ -25,7 +39,7 @@ protocol DeclProtocol {
     var fullName: String { get }
     var declType: DeclType { get }
     var inheritedTypes: [String] { get }
-    func refTypes(with declMap: DeclMap, filterKey: String?) -> [String]
+    func referencedTypes(with declMap: DeclMap, filterKey: String?) -> [String]
     var refTypes: [String] { get }
     var boundTypes: [String] { get }
     var boundTypesAL: [String] { get } // Bound types for access levels
@@ -59,7 +73,7 @@ extension DeclProtocol {
           return [val]
       }
 
-    func refTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
+    func referencedTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
         return refTypes.filter { declMap[$0] != nil || $0.contains(".") || $0.hasSuffix("Strings") || $0.hasSuffix("Images") }
     }
 
@@ -104,7 +118,7 @@ extension Syntax: DeclProtocol {
     }
 
     var boundTypes: [String] {
-        return tokens.exprTokenList
+        return tokens(viewMode: .all).exprTokenList
     }
 
     var boundTypesAL: [String] {
@@ -134,9 +148,9 @@ extension DeclSyntax: DeclProtocol {
             return d.name
         } else if let d = self.as(EnumCaseDeclSyntax.self) {
             return d.name
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.name
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.name
         } else {
             return ""
@@ -175,9 +189,9 @@ extension DeclSyntax: DeclProtocol {
             return d.fullName
         } else if let d = self.as(EnumCaseDeclSyntax.self) {
             return d.fullName
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.fullName
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.fullName
         }
         return name
@@ -205,9 +219,9 @@ extension DeclSyntax: DeclProtocol {
             return d.declType
         } else if let d = self.as(EnumCaseDeclSyntax.self) {
             return d.declType
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.declType
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.declType
         }
         return .other
@@ -225,15 +239,15 @@ extension DeclSyntax: DeclProtocol {
             return d.inheritedTypes
         } else if let d = self.as(EnumDeclSyntax.self) {
             return d.inheritedTypes
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.inheritedTypes
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.inheritedTypes
         }
         return []
     }
 
-    func refTypes(with declMap: DeclMap, filterKey: String?) -> [String] {
+    func referencedTypes(with declMap: DeclMap, filterKey: String?) -> [String] {
         var list = refTypes
         if !declMap.isEmpty {
             list = list.filter{declMap[$0] != nil}
@@ -262,9 +276,9 @@ extension DeclSyntax: DeclProtocol {
             return d.refTypes
         } else if let d = self.as(EnumCaseDeclSyntax.self) {
             return d.refTypes
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.refTypes
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.refTypes
         }
         return []
@@ -291,9 +305,9 @@ extension DeclSyntax: DeclProtocol {
             return d.boundTypes
         } else if let d = self.as(EnumCaseDeclSyntax.self) {
             return d.boundTypes
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.boundTypes
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.boundTypes
         }
         return []
@@ -320,9 +334,9 @@ extension DeclSyntax: DeclProtocol {
             return d.boundTypesAL
         } else if let d = self.as(EnumCaseDeclSyntax.self) {
             return d.boundTypesAL
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.boundTypesAL
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.boundTypesAL
         }
         return []
@@ -349,9 +363,9 @@ extension DeclSyntax: DeclProtocol {
             return d.accessLevel
         } else if let d = self.as(EnumCaseDeclSyntax.self) {
             return d.accessLevel
-        } else if let d = self.as(TypealiasDeclSyntax.self) {
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.accessLevel
-        } else if let d = self.as(AssociatedtypeDeclSyntax.self) {
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.accessLevel
         }
         return ""
@@ -374,7 +388,7 @@ extension DeclSyntax: DeclProtocol {
 }
 
 
-extension MemberDeclListItemSyntax: DeclProtocol {
+extension MemberBlockItemSyntax: DeclProtocol {
     var refTypes: [String] {
         return decl.refTypes
     }
@@ -420,7 +434,7 @@ extension MemberDeclListItemSyntax: DeclProtocol {
     }
 }
 
-extension MemberDeclListSyntax: DeclProtocol {
+extension MemberBlockItemListSyntax: DeclProtocol {
 
     var name: String {
         return ""
@@ -488,12 +502,12 @@ extension ProtocolDeclSyntax: DeclProtocol {
     }
     
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var inheritedTypes: [String] {
-        return [inheritanceClause?.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList,
+        return [inheritanceClause?.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}.filter{$0 != name}
     }
 
@@ -503,7 +517,7 @@ extension ProtocolDeclSyntax: DeclProtocol {
 
     var boundTypesAL: [String] {
         return [boundTypes,
-                members.members.boundTypesAL,
+                memberBlock.members.boundTypesAL,
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -516,12 +530,12 @@ extension ProtocolDeclSyntax: DeclProtocol {
     }
     
     var isPrivate: Bool {
-        return self.modifiers?.isPrivate ?? false
+        return self.modifiers.isPrivate
     }
     
 
     var attributesDescription: String {
-        self.attributes?.trimmedDescription ?? ""
+        self.attributes.trimmedDescription ?? ""
     }
     
     var offset: Int64 {
@@ -529,7 +543,7 @@ extension ProtocolDeclSyntax: DeclProtocol {
     }
     
     func annotationMetadata(with annotation: String) -> AnnotationMetadata? {
-        return leadingTrivia?.annotationMetadata(with: annotation)
+        return leadingTrivia.annotationMetadata(with: annotation)
     }
 
 }
@@ -555,7 +569,7 @@ extension ClassDeclSyntax: DeclProtocol {
     }
     
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
     
     var declType: DeclType {
@@ -572,20 +586,20 @@ extension ClassDeclSyntax: DeclProtocol {
 
     var refTypes: [String] {
         return [boundTypesAL,
-                members.members.boundTypesAL,
+                memberBlock.members.boundTypesAL,
             ].compactMap{$0}.flatMap{$0}
     }
 
 
     var inheritedTypes: [String] {
-        return [genericParameterClause?.genericParameterList.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList,
-                inheritanceClause?.tokens.exprTokenList
+        return [genericParameterClause?.parameters.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
+                inheritanceClause?.tokens(viewMode: .all).exprTokenList
             ].compactMap{$0}.flatMap{$0}.filter{$0 != name}
     }
 
     var attributesDescription: String {
-        self.attributes?.trimmedDescription ?? ""
+        self.attributes.trimmedDescription ?? ""
     }
     
     var offset: Int64 {
@@ -593,7 +607,7 @@ extension ClassDeclSyntax: DeclProtocol {
     }
     
     func annotationMetadata(with annotation: String) -> AnnotationMetadata? {
-        return leadingTrivia?.annotationMetadata(with: annotation)
+        return leadingTrivia.annotationMetadata(with: annotation)
     }
 }
 
@@ -625,12 +639,12 @@ extension ExtensionDeclSyntax: DeclProtocol {
         return .extensionType
     }
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var inheritedTypes: [String] {
-        return [inheritanceClause?.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList,
+        return [inheritanceClause?.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}.filter{$0 != name}
     }
 
@@ -642,7 +656,7 @@ extension ExtensionDeclSyntax: DeclProtocol {
 
     var boundTypesAL: [String] {
         return [boundTypes,
-                members.members.boundTypesAL,
+                memberBlock.members.boundTypesAL,
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -651,8 +665,8 @@ extension ExtensionDeclSyntax: DeclProtocol {
         return boundTypesAL
     }
 
-    func refTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
-        var list = [extendedType.tokens.exprTokenList,
+    func referencedTypes(with declMap: DeclMap, filterKey: String? = nil) -> [String] {
+        var list = [extendedType.tokens(viewMode: .all).exprTokenList,
                     refTypes
             ].compactMap{$0}.flatMap{$0}
 
@@ -691,7 +705,7 @@ extension EnumCaseDeclSyntax: DeclProtocol {
     }
 
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var declType: DeclType {
@@ -699,7 +713,7 @@ extension EnumCaseDeclSyntax: DeclProtocol {
     }
 
     var boundTypes: [String] {
-        let list = elements.compactMap{$0.associatedValue?.parameterList.compactMap{$0.type?.tokens.exprTokenList}.flatMap{$0}}.flatMap{$0}
+        let list = elements.compactMap{$0.parameterClause?.parameters.flatMap{$0.type.tokens(viewMode: .all).exprTokenList}}.flatMap{$0}
         return list
     }
 
@@ -728,14 +742,14 @@ extension EnumDeclSyntax: DeclProtocol {
     }
 
     var attributesDescription: String {
-        self.attributes?.description.trimmed ?? ""
+        self.attributes.description.trimmed
     }
 
     var name: String {
         return identifier.text.trimmed.raw
     }
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var declType: DeclType {
@@ -743,9 +757,9 @@ extension EnumDeclSyntax: DeclProtocol {
     }
 
     var inheritedTypes: [String] {
-        return [inheritanceClause?.tokens.exprTokenList,
-                genericParameters?.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList
+        return [inheritanceClause?.tokens(viewMode: .all).exprTokenList,
+                genericParameterClause?.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList
             ].compactMap{$0}.flatMap{$0}.filter{ $0 != name }
     }
 
@@ -755,7 +769,7 @@ extension EnumDeclSyntax: DeclProtocol {
 
     var boundTypesAL: [String] {
         return [boundTypes,
-                members.members.boundTypesAL
+                memberBlock.members.boundTypesAL
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -780,7 +794,7 @@ extension StructDeclSyntax: DeclProtocol {
     }
 
     var attributesDescription: String {
-        self.attributes?.description.trimmed ?? ""
+        self.attributes.description.trimmed
     }
 
     var name: String {
@@ -790,13 +804,13 @@ extension StructDeclSyntax: DeclProtocol {
         return .structType
     }
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var inheritedTypes: [String] {
-        return [inheritanceClause?.tokens.exprTokenList,
-                genericParameterClause?.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList,
+        return [inheritanceClause?.tokens(viewMode: .all).exprTokenList,
+                genericParameterClause?.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}.filter{ $0 != name }
     }
 
@@ -810,12 +824,12 @@ extension StructDeclSyntax: DeclProtocol {
 
     var refTypes: [String] {
         return [boundTypesAL,
-                members.members.boundTypesAL,
+                memberBlock.members.boundTypesAL,
             ].compactMap{$0}.flatMap{$0}
     }
 }
 
-extension AssociatedtypeDeclSyntax: DeclProtocol {
+extension AssociatedTypeDeclSyntax: DeclProtocol {
     var isExprOrStmt: Bool {
         return false
     }
@@ -839,18 +853,18 @@ extension AssociatedtypeDeclSyntax: DeclProtocol {
     }
 
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var inheritedTypes: [String] {
-        return [inheritanceClause?.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList,
+        return [inheritanceClause?.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}.filter{$0 != name}
     }
 
     var boundTypes: [String] {
         return [inheritedTypes,
-                initializer?.value.tokens.exprTokenList.filter{$0 != name}
+                initializer?.value.tokens(viewMode: .all).exprTokenList.filter{$0 != name}
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -862,7 +876,7 @@ extension AssociatedtypeDeclSyntax: DeclProtocol {
     }
 }
 
-extension TypealiasDeclSyntax: DeclProtocol {
+extension TypeAliasDeclSyntax: DeclProtocol {
     var isExprOrStmt: Bool {
         return false
     }
@@ -885,18 +899,18 @@ extension TypealiasDeclSyntax: DeclProtocol {
         return .typealiasType
     }
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var inheritedTypes: [String] {
-        return [genericParameterClause?.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList,
+        return [genericParameterClause?.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}.filter{$0 != name}
     }
 
     var boundTypes: [String] {
         return [inheritedTypes,
-                initializer?.value.tokens.exprTokenList.filter{$0 != name}
+                initializer.value.tokens(viewMode: .all).exprTokenList.filter{$0 != name}
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -918,8 +932,8 @@ extension PatternBindingSyntax {
         if let val = initializer?.value {
             if let expr = val.as(FunctionCallExprSyntax.self) {
                 return expr.calledExpression.description.trimmed
-            } else if let expr = val.as(ExprSyntax.self) {
-                return expr.description.trimmed
+            } else if let _ = ExprSyntax(val) {
+                return val.description.trimmed
             }
         }
         return .unknownVal
@@ -927,23 +941,23 @@ extension PatternBindingSyntax {
 
     func boundTypes(isTransparent: Bool) -> [String] {
         var list = [String]()
-        if let bound = typeAnnotation?.type.tokens.exprTokenList {
+        if let bound = typeAnnotation?.type.tokens(viewMode: .all).exprTokenList {
             list.append(contentsOf: bound)
         }
         if let val = initializer?.value {
             if let expr = val.as(FunctionCallExprSyntax.self) {
                 let exprList = [
-                    expr.calledExpression.tokens.exprTokenList,
-                    expr.argumentList.map{$0.expression.tokens.exprTokenList}.flatMap{$0}
+                    expr.calledExpression.tokens(viewMode: .all).exprTokenList,
+                    expr.arguments.map{$0.expression.tokens(viewMode: .all).exprTokenList}.flatMap{$0}
                     ].flatMap{$0}
                 list.append(contentsOf: exprList)
-            } else if let expr = val.as(ExprSyntax.self) {
-                list.append(contentsOf: expr.tokens.exprTokenList)
+            } else if let _ = ExprSyntax(val) {
+                list.append(contentsOf: val.tokens(viewMode: .all).exprTokenList)
             }
         }
 
         if isTransparent {
-            if let bodyTokens = accessor?.tokens.exprTokenList {
+            if let bodyTokens = accessorBlock?.tokens(viewMode: .all).exprTokenList {
                 list.append(contentsOf: bodyTokens)
             }
         }
@@ -1037,15 +1051,15 @@ extension VariableDeclSyntax: DeclProtocol {
     }
 
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var isOverride: Bool {
-        return modifiers?.isOverride ?? false
+        return modifiers.isOverride
     }
 
     var attributesDescription: String {
-        return attributes?.trimmedDescription ?? ""
+        return attributes.trimmedDescription ?? ""
     }
 
     var type: String {
@@ -1057,9 +1071,8 @@ extension VariableDeclSyntax: DeclProtocol {
         for b in bindings {
             list.append(contentsOf: b.boundTypes(isTransparent: isTransparent))
         }
-        if let attrs = attributes?.tokens.exprTokenList {
-            list.append(contentsOf: attrs)
-        }
+        let attrs = attributes.tokens(viewMode: .all).exprTokenList
+        list.append(contentsOf: attrs)
         return list.filter{$0 != name}
     }
 
@@ -1069,7 +1082,7 @@ extension VariableDeclSyntax: DeclProtocol {
 
     var refTypes: [String] {
         let ret = [boundTypesAL,
-                bindings.compactMap{$0.accessor?.tokens.exprTokenList}.flatMap{$0}
+                bindings.compactMap{$0.accessorBlock?.tokens(viewMode: .all).exprTokenList}.flatMap{$0}
             ].compactMap{$0}.flatMap{$0}
         return ret
     }
@@ -1082,7 +1095,7 @@ extension FunctionDeclSyntax: DeclProtocol {
     }
 
     var type: String {
-        return signature.output?.returnType.description.trimmed ?? ""
+        return signature.returnClause?.type.description.trimmed ?? ""
     }
 
     var fullName: String {
@@ -1090,22 +1103,22 @@ extension FunctionDeclSyntax: DeclProtocol {
     }
 
     var declType: DeclType {
-        if self.identifier.tokenKind == .spacedBinaryOperator(self.identifier.text) {
+        if self.identifier.tokenKind == .binaryOperator(self.identifier.text) {
             return .operatorType
         }
         return .funcType
     }
 
     var accessLevel: String {
-        return self.modifiers?.acl ?? ""
+        return self.modifiers.acl
     }
 
     var isOverride: Bool {
-        return modifiers?.isOverride ?? false
+        return modifiers.isOverride
     }
 
     var attributesDescription: String {
-        return attributes?.trimmedDescription ?? ""
+        return attributes.trimmedDescription ?? ""
     }
 
     var inheritedTypes: [String] {
@@ -1117,15 +1130,15 @@ extension FunctionDeclSyntax: DeclProtocol {
     }
 
     var boundTypes: [String] {
-        let genericParamTypes = genericParameterClause?.genericParameterList.tokens.exprTokenList
-        let genericWhereTypes = genericWhereClause?.tokens.exprTokenList
-        let paramTypes = signature.input.parameterList.compactMap{$0.type?.tokens.exprTokenList}.flatMap{$0}
-        let paramVals = signature.input.parameterList.compactMap{$0.defaultArgument?.value.tokens.exprTokenList}.flatMap{$0}
-        let returnTypes = signature.output?.returnType.tokens.exprTokenList
-        let attrs = attributes?.tokens.exprTokenList  // e.g. @FunctionBuilder
+        let genericParamTypes = genericParameterClause?.parameters.tokens(viewMode: .all).exprTokenList
+        let genericWhereTypes = genericWhereClause?.tokens(viewMode: .all).exprTokenList
+        let paramTypes = signature.parameterClause.parameters.flatMap{$0.type.tokens(viewMode: .all).exprTokenList}
+        let paramVals = signature.parameterClause.parameters.flatMap{$0.defaultValue?.value.tokens(viewMode: .all).exprTokenList ?? []}
+        let returnTypes = signature.returnClause?.type.tokens(viewMode: .all).exprTokenList
+        let attrs = attributes.tokens(viewMode: .all).exprTokenList  // e.g. @FunctionBuilder
         var list = [genericParamTypes, genericWhereTypes, paramTypes, paramVals, returnTypes, attrs].compactMap{$0}.flatMap{$0}
         if attributesDescription.contains(String.transparent) {
-            if let bodyTokens = body?.tokens.exprTokenList {
+            if let bodyTokens = body?.tokens(viewMode: .all).exprTokenList {
                 list.append(contentsOf: bodyTokens)
             }
         }
@@ -1137,7 +1150,7 @@ extension FunctionDeclSyntax: DeclProtocol {
 
     var refTypes: [String] {
         return [boundTypesAL,
-                body?.tokens.exprTokenList
+                body?.tokens(viewMode: .all).exprTokenList
             ].compactMap{$0}.flatMap{$0}
     }
 }
@@ -1151,7 +1164,7 @@ extension InitializerDeclSyntax: DeclProtocol {
     }
 
     var fullName: String {
-        return name + "_" + parameters.description.trimmed
+        return name + "_" + signature.parameterClause.parameters.description.trimmed
     }
 
     var declType: DeclType {
@@ -1159,41 +1172,39 @@ extension InitializerDeclSyntax: DeclProtocol {
     }
 
     var isOverride: Bool {
-        return modifiers?.isOverride ?? false
+        return modifiers.isOverride
     }
 
     var attributesDescription: String {
-        return attributes?.trimmedDescription ?? ""
+        return attributes.trimmedDescription ?? ""
     }
 
     var accessLevel: String {
-        return modifiers?.acl ?? ""
+        return modifiers.acl
     }
 
     var boundTypes: [String] {
-        let genericParamTypes = genericParameterClause?.genericParameterList.tokens.exprTokenList
-        let genericWhereTypes = genericWhereClause?.tokens.exprTokenList
+        let genericParamTypes = genericParameterClause?.parameters.tokens(viewMode: .all).exprTokenList
+        let genericWhereTypes = genericWhereClause?.tokens(viewMode: .all).exprTokenList
 
         var paramList = [String]()
-        for param in parameters.parameterList {
-            if let pval = param.defaultArgument?.value {
+        for param in signature.parameterClause.parameters {
+            if let pval = param.defaultValue?.value {
                 if let accessed = pval.as(MemberAccessExprSyntax.self), let base = accessed.base {
                     paramList.append(accessed.description.trimmed)
-                    paramList.append(contentsOf: base.tokens.exprTokenList)
+                    paramList.append(contentsOf: base.tokens(viewMode: .all).exprTokenList)
                 } else {
-                    paramList.append(contentsOf: pval.tokens.exprTokenList)
+                    paramList.append(contentsOf: pval.tokens(viewMode: .all).exprTokenList)
                 }
             }
-            if let ptypes = param.type?.tokens.exprTokenList {
-                paramList.append(contentsOf: ptypes)
-            }
+            paramList.append(contentsOf: param.type.tokens(viewMode: .all).exprTokenList)
         }
 
         var list = [genericParamTypes, genericWhereTypes, paramList].compactMap{$0}.flatMap{$0}
 
         // @_transparent on public or @usableFromInline functions require all types in sig and body to be public
         if attributesDescription.contains(String.transparent) {
-            if let bodyTokens = body?.tokens.exprTokenList {
+            if let bodyTokens = body?.tokens(viewMode: .all).exprTokenList {
                 list.append(contentsOf: bodyTokens)
             }
         }
@@ -1206,7 +1217,7 @@ extension InitializerDeclSyntax: DeclProtocol {
 
     var refTypes: [String] {
         return [boundTypesAL,
-                body?.tokens.exprTokenList
+                body?.tokens(viewMode: .all).exprTokenList
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -1222,13 +1233,11 @@ extension InitializerDeclSyntax: DeclProtocol {
         if declType == .protocolType {
             return true
         } else if declType == .classType {
-            if let modifiers = self.modifiers {
-                
-                if modifiers.isConvenience {
-                    return false
-                }
-                return modifiers.isRequired
+            let modifiers = self.modifiers
+            if modifiers.isConvenience {
+                return false
             }
+            return modifiers.isRequired
         }
         return false
     }
@@ -1237,7 +1246,7 @@ extension InitializerDeclSyntax: DeclProtocol {
 extension SubscriptDeclSyntax: DeclProtocol {
 
     var fullName: String {
-        return name + "_" + result.returnType.description.trimmed
+        return name + "_" + returnClause.type.description.trimmed
     }
 
     var name: String {
@@ -1249,7 +1258,7 @@ extension SubscriptDeclSyntax: DeclProtocol {
     }
 
     var accessLevel: String {
-        return modifiers?.acl ?? ""
+        return modifiers.acl
     }
 
     var inheritedTypes: [String] {
@@ -1264,14 +1273,14 @@ extension SubscriptDeclSyntax: DeclProtocol {
     }
 
     var type: String {
-        return result.returnType.description.trimmed
+        return returnClause.type.description.trimmed
     }
 
     var boundTypes: [String] {
-        return [result.returnType.tokens.exprTokenList,
-                genericParameterClause?.genericParameterList.tokens.exprTokenList,
-                genericWhereClause?.tokens.exprTokenList,
-                attributes?.tokens.exprTokenList,
+        return [returnClause.type.tokens(viewMode: .all).exprTokenList,
+                genericParameterClause?.parameters.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
+                attributes.tokens(viewMode: .all).exprTokenList,
             ].compactMap{$0}.flatMap{$0}.filter {$0 != name }
     }
 
@@ -1282,7 +1291,7 @@ extension SubscriptDeclSyntax: DeclProtocol {
 
     var refTypes: [String] {
         return [boundTypesAL,
-                accessor?.tokens.exprTokenList
+                accessorBlock?.tokens(viewMode: .all).exprTokenList
             ].compactMap{$0}.flatMap{$0}
     }
 
@@ -1293,16 +1302,16 @@ extension SubscriptDeclSyntax: DeclProtocol {
 
 extension AttributeListSyntax {
     var trimmedDescription: String? {
-        return self.withoutTrivia().description.trimmingCharacters(in: .whitespacesAndNewlines)
+        return self.trimmed.description.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
     }
 }
 
-extension ModifierListSyntax {
+extension DeclModifierListSyntax {
     var acl: String {
         for modifier in self {
-            for token in modifier.tokens {
+            for token in modifier.tokens(viewMode: .all) {
                 switch token.tokenKind {
-                case .publicKeyword, .internalKeyword, .privateKeyword, .fileprivateKeyword:
+                case .keyword(.public), .keyword(.internal), .keyword(.private), .keyword(.fileprivate):
                     return token.text
                 default:
                     // For some reason openKeyword option is not available in TokenKind so need to address separately
@@ -1316,35 +1325,35 @@ extension ModifierListSyntax {
     }
 
     var isStatic: Bool {
-        return self.tokens.filter {$0.tokenKind == .staticKeyword }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.tokenKind == .keyword(.static) }.count > 0
     }
 
     var isRequired: Bool {
-        return self.tokens.filter {$0.text == String.required }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.text == String.required }.count > 0
     }
 
     var isConvenience: Bool {
-        return self.tokens.filter {$0.text == String.convenience }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.text == String.convenience }.count > 0
     }
 
     var isOverride: Bool {
-        return self.tokens.filter {$0.text == String.override }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.text == String.override }.count > 0
     }
 
     var isFinal: Bool {
-        return self.tokens.filter {$0.text == String.final }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.text == String.final }.count > 0
     }
 
     var isPrivate: Bool {
-        return self.tokens.filter {$0.tokenKind == .privateKeyword || $0.tokenKind == .fileprivateKeyword }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.tokenKind == .keyword(.private) || $0.tokenKind == .keyword(.fileprivate) }.count > 0
     }
 
     var isPublic: Bool {
-        return self.tokens.filter {$0.tokenKind == .publicKeyword }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.tokenKind == .keyword(.public) }.count > 0
     }
 
     var isOpen: Bool {
-        return self.tokens.filter {$0.text == String.open }.count > 0
+        return self.tokens(viewMode: .all).filter {$0.text == String.open }.count > 0
     }
 }
 
@@ -1427,7 +1436,7 @@ extension TokenSyntax {
         let startsWithLetter = text.first?.isLetter ?? false
         let validFirstChar = text.first == "_" || startsWithLetter
         if (validFirstChar && (text.isAlphanumeric || text.contains("_"))) ||
-            tokenKind == .spacedBinaryOperator(text) {
+            tokenKind == .binaryOperator(text) {
             return text
         }
 
@@ -1437,8 +1446,8 @@ extension TokenSyntax {
     var exprToken: String? {
         if tokenKind != .stringQuote,
             tokenKind != .stringSegment(text),
-            tokenKind != .spacedBinaryOperator(text),
-            tokenKind != .initKeyword {
+            tokenKind != .binaryOperator(text),
+            tokenKind != .keyword(.`init`) {
 
             return stringToken
         }

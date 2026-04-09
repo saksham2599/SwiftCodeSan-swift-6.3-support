@@ -33,73 +33,73 @@ public final class DeclRemover: SyntaxRewriter {
 
     override public func visit(_ node: ExtensionDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankExtensionDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankEnumDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: StructDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankStructDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: ProtocolDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankProtocolDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: ClassDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankClassDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankFunctionDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankSubscriptDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: InitializerDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankInitializerDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankVariableDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
-    override public func visit(_ node: TypealiasDeclSyntax) -> DeclSyntax {
+    override public func visit(_ node: TypeAliasDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankTypealiasDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
-    override public func visit(_ node: AssociatedtypeDeclSyntax) -> DeclSyntax {
+    override public func visit(_ node: AssociatedTypeDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankAssociatedtypeDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }
     override public func visit(_ node: EnumCaseDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, fullName: node.fullName, description: node.description, declType: node.declType) {
-            return DeclSyntax(SyntaxFactory.makeBlankEnumCaseDecl())
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
         return super.visit(node)
     }

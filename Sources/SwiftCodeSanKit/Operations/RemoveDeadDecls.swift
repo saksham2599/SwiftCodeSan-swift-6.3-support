@@ -16,6 +16,9 @@
 
 import Foundation
 
+nonisolated(unsafe) private var nref = 0
+nonisolated(unsafe) private var ndecls = 0
+
 public func removeDeadDecls(filesToModules: [String: String],
                             whitelist: Whitelist?,
                             topDeclsOnly: Bool,
@@ -24,12 +27,13 @@ public func removeDeadDecls(filesToModules: [String: String],
                             inplaceTests: Bool,
                             logFilePath: String? = nil,
                             concurrencyLimit: Int? = nil,
-                            onCompletion: @escaping () -> ()) {
+                            onCompletion: @Sendable @escaping () -> ()) {
     
     log("Start of removing dead code: topDeclsOnly", topDeclsOnly)
     scanConcurrencyLimit = concurrencyLimit
     let p = DeclParser()
     var pathToDeclsUpdate = [String: [DeclMetadata]]()
+    nref = 0
     
     log("Scan and map top-level decls...")
     logTime()
@@ -41,7 +45,6 @@ public func removeDeadDecls(filesToModules: [String: String],
     
     log("Check references, look up their source modules, and mark used...")
     let flatDeclMap = flatten(declMap: declMap)
-    var nref = 0
     p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { (path, refs, imports) in
         if let refModule = filesToModules[path] {
             markUsed(refs, in: refModule, imports: imports, with: flatDeclMap, updateMembers: true)
@@ -115,7 +118,7 @@ public func removeDeadDecls(filesToModules: [String: String],
     if inplace {
         log("Remove unused decls from files...", pathToDeclsUpdate.count)
         let updater = DeclUpdater()
-        updater.removeDeadDecls(filesToDecls: pathToDeclsUpdate) { (path, content) in
+        updater.removeDeadDecls(filesToDecls: pathToDeclsUpdate) { @Sendable (path, content) in
             try? content.write(toFile: path, atomically: true, encoding: .utf8)
         }
         logTime()
@@ -172,10 +175,10 @@ private func markBoundTypesUsed(_ decl: DeclMetadata, level: Int, declMap: DeclM
 }
 
 
-var shouldRetry = false
+nonisolated(unsafe) var shouldRetry = false
 private func markInterfaceMembersUsed(declMap: DeclMap) {
-    var ndecls = 0
-    scan(declMap) { (key, vals, lock) in
+    ndecls = 0
+    scan(declMap) { @Sendable (key, vals, lock) in
         for cur in vals {
             var members = [DeclMetadata]()
             var interfaceMembers = [DeclMetadata]()

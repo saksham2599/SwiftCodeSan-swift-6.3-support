@@ -17,17 +17,15 @@
 
 import Foundation
 import SwiftSyntax
-import SwiftSyntaxParser
+import SwiftParser
 
-extension SyntaxParser {
-    public static func parse(_ fileData: Data, path: String,
-                             diagnosticHandler: ((Diagnostic) -> Void)? = nil) throws -> SourceFileSyntax {
+public enum SyntaxParser {
+    public static func parse(_ fileData: Data, path: String) throws -> SourceFileSyntax {
         // Avoid using `String(contentsOf:)` because it creates a wrapped NSString.
         let source = fileData.withUnsafeBytes { buf in
             return String(decoding: buf.bindMemory(to: UInt8.self), as: UTF8.self)
         }
-        return try parse(source: source, filenameForDiagnostics: path,
-                         diagnosticHandler: diagnosticHandler)
+        return Parser.parse(source: source)
     }
 
     public static func parse(_ path: String) throws -> SourceFileSyntax {
