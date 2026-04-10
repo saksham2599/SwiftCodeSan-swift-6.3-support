@@ -18,6 +18,7 @@ import Foundation
 
 nonisolated(unsafe) private var nref = 0
 nonisolated(unsafe) private var ndecls = 0
+private let shouldRetryLock = NSLock()
 
 public func removeDeadDecls(filesToModules: [String: String],
                             whitelist: Whitelist?,
@@ -41,7 +42,7 @@ public func removeDeadDecls(filesToModules: [String: String],
                                     topDeclsOnly: false,
                                     whitelist: whitelist)
     logTime()
-    print("WWW: ", p.npaths, p.wpaths)
+    log("Scanned paths: \(p.npaths), Whitelisted paths: \(p.wpaths)")
     
     log("Check references, look up their source modules, and mark used...")
     let flatDeclMap = flatten(declMap: declMap)
@@ -175,9 +176,12 @@ private func markBoundTypesUsed(_ decl: DeclMetadata, level: Int, declMap: DeclM
 }
 
 
-nonisolated(unsafe) var shouldRetry = false
+nonisolated(unsafe) private var shouldRetry = false
 private func markInterfaceMembersUsed(declMap: DeclMap) {
     ndecls = 0
+    shouldRetryLock.lock()
+    shouldRetry = false
+    shouldRetryLock.unlock()
     scan(declMap) { @Sendable (key, vals, lock) in
         for cur in vals {
             var members = [DeclMetadata]()

@@ -103,6 +103,10 @@ final class RefChecker: SyntaxVisitor {
         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
+    override func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
+        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        return .visitChildren
+    }
 
     override func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
@@ -115,9 +119,24 @@ final class RefChecker: SyntaxVisitor {
     }
 
     override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
-        if node.attributes.isEmpty, node.importKindSpecifier == nil {
+        // For selective imports like `import class Foundation.NSObject`, extract
+        // the root module name (the first path component, e.g. "Foundation")
+        // so it is tracked and never incorrectly removed.
+        if node.importKindSpecifier != nil {
+            // Selective import: `import class/func/var/struct/enum/typealias Module.Symbol`
+            if let rootModule = node.path.first?.name.text {
+                imports.append(rootModule)
+            }
+        } else if node.attributes.isEmpty {
+            // Plain import with no attributes: `import ModuleName`
             let str = node.path.description.trimmed
             imports.append(str)
+        } else {
+            // @testable or @_exported import — track the module so it is not
+            // considered unused, but the ImportRewriter will never remove them.
+            if let rootModule = node.path.first?.name.text {
+                imports.append(rootModule)
+            }
         }
         return .skipChildren
     }

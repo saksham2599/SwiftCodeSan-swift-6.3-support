@@ -34,7 +34,7 @@ final class DeclUpdater: @unchecked Sendable {
                 completion(path, ret.description)
                 lock?.unlock()
             }  catch {
-                fatalError(error.localizedDescription)
+                log("Error updating access levels in \(path): \(error.localizedDescription)", level: .error)
             }
         }
     }
@@ -51,7 +51,7 @@ final class DeclUpdater: @unchecked Sendable {
                 completion(path, ret.description)
                 lock?.unlock()
             }  catch {
-                fatalError(error.localizedDescription)
+                log("Error removing dead decls in \(path): \(error.localizedDescription)", level: .error)
             }
         }
     }
@@ -93,7 +93,7 @@ final class DeclUpdater: @unchecked Sendable {
             completion(path, ret.description)
             lock?.unlock()
         } catch {
-            fatalError(error.localizedDescription)
+            log("Error removing unused imports in \(path): \(error.localizedDescription)", level: .error)
         }
     }
 }

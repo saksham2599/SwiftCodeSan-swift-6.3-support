@@ -31,6 +31,16 @@ public final class ImportRewriter: SyntaxRewriter {
     }
 
     override public func visit(_ node: ImportDeclSyntax) -> DeclSyntax {
+        // Never remove @_exported imports — they are used to re-export symbols to consumers
+        // Never remove @testable imports — they are required for test access
+        let attrDescriptions = node.attributes.map { $0.description }
+        let hasProtectedAttribute = attrDescriptions.contains(where: {
+            $0.contains("_exported") || $0.contains("testable")
+        })
+        if hasProtectedAttribute {
+            return super.visit(node)
+        }
+
         var remove = false
         let str = node.path.description.trimmed
         if unused.contains(str) {

@@ -49,6 +49,10 @@ public enum AccessLevel: Int, Comparable, Sendable {
         return self == .public || self == .open
     }
 
+    public var isPackageOrHigher: Bool {
+        return self >= .package
+    }
+
     public var keyword: String {
         switch self {
         case .private: return "private"
@@ -89,6 +93,10 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
 
     public var isPublicOrOpen: Bool {
         return accessLevel.isPublicOrOpen
+    }
+
+    public var isPackageOrHigher: Bool {
+        return accessLevel.isPackageOrHigher
     }
 
     @discardableResult

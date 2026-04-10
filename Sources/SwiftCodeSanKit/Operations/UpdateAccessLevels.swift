@@ -230,7 +230,7 @@ private func updateBoundMemberALs(key cur: DeclMetadata,
             if !boundType.isEmpty, cur.name != boundType, let boundTypeVals = declMap[boundType] {
                 for boundDecl in boundTypeVals {
                     if !visitedCurrent,
-                       boundDecl.isPublicOrOpen,
+                       boundDecl.isPackageOrHigher,
                        boundDecl.shouldExpose {
                         
                         for member in cur.members {
@@ -403,8 +403,7 @@ private func markVisiblity(_ refs: Set<String>, in refModule: String, package re
         // If above fails (e.g. encloser type is not found), or non-member access, try following
         if let refDecls = declMap[refKey] {
             for refDecl in refDecls {
-                if true ||
-                    refDecl.isPublicOrOpen ||
+                if refDecl.isPackageOrHigher ||
                     refDecl.declType == .extensionType ||
                     refDecl.isExtensionMember {
                     

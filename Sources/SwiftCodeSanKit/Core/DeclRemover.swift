@@ -61,6 +61,12 @@ public final class DeclRemover: SyntaxRewriter {
         }
         return super.visit(node)
     }
+    override public func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
+        if shouldRemove(node.name, encloser: "", fullName: node.fullName, description: node.description, declType: node.declType) {
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
+        }
+        return super.visit(node)
+    }
     override public func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
         if shouldRemove(node.name, encloser: Syntax(node).encloserName, fullName: node.fullName, description: node.description, declType: node.declType) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))

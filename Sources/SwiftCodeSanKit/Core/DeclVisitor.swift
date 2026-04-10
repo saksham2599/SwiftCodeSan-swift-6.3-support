@@ -68,6 +68,10 @@ final class DeclVisitor: SyntaxVisitor {
         updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
         return .skipChildren
     }
+    override func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
+        updateDecl(node, description: node.description, members: topDeclsOnly ? nil : node.memberBlock.members)
+        return .visitChildren
+    }
     override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
         importedModules.append(node.path.description.trimmed)
         return .visitChildren
@@ -109,6 +113,7 @@ final class DeclVisitor: SyntaxVisitor {
                     mdecl.shouldExpose = true
                 }
                 mdecl.used = true
+                mdecl.updateTargetAccessLevel(to: mdecl.accessLevel)
             }
         }
         return mdecls
@@ -132,6 +137,7 @@ final class DeclVisitor: SyntaxVisitor {
                     decl.shouldExpose = true
                 }
                 decl.used = true
+                decl.updateTargetAccessLevel(to: decl.accessLevel)
             }
 
             if let members = members {

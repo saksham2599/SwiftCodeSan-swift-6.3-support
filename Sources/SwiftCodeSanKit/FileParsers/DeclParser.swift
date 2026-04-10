@@ -116,7 +116,7 @@ public class DeclParser: @unchecked Sendable {
             defer {lock?.unlock()}
             completion(path, visitor.declMap)
         } catch {
-            fatalError(error.localizedDescription)
+            log("Error reading file \(path): \(error.localizedDescription)", level: .error)
         }
     }
 
@@ -143,7 +143,7 @@ public class DeclParser: @unchecked Sendable {
             completion(path, visitor.refs, visitor.imports)
             lock?.unlock()
         } catch {
-            fatalError(error.localizedDescription)
+            log("Error reading file \(path): \(error.localizedDescription)", level: .error)
         }
     }
 

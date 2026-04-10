@@ -168,6 +168,20 @@ public final class AccessLevelRewriter: SyntaxRewriter {
         return super.visit(updated)
     }
 
+    override public func visit(_ node: ActorDeclSyntax) -> DeclSyntax {
+        let updated = updateNode(node,
+                                 name: { $0.name },
+                                 encloser: { _ in "" },
+                                 fullName: { $0.fullName },
+                                 description: { $0.description },
+                                 declType: { $0.declType },
+                                 modifiers: { $0.modifiers },
+                                 withModifiers: { $0.with(\.modifiers, $1) },
+                                 keyword: { $0.actorKeyword },
+                                 withKeyword: { $0.with(\.actorKeyword, $1) })
+        return super.visit(updated)
+    }
+
     override public func visit(_ node: FunctionDeclSyntax) -> DeclSyntax {
         let updated = updateNode(node,
                                  name: { $0.name },

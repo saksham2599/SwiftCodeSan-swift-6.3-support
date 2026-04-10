@@ -152,6 +152,8 @@ extension DeclSyntax: DeclProtocol {
             return d.name
         } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.name
+        } else if let d = self.as(ActorDeclSyntax.self) {
+            return d.name
         } else {
             return ""
         }
@@ -193,6 +195,8 @@ extension DeclSyntax: DeclProtocol {
             return d.fullName
         } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
             return d.fullName
+        } else if let d = self.as(ActorDeclSyntax.self) {
+            return d.fullName
         }
         return name
     }
@@ -222,6 +226,8 @@ extension DeclSyntax: DeclProtocol {
         } else if let d = self.as(TypeAliasDeclSyntax.self) {
             return d.declType
         } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
+            return d.declType
+        } else if let d = self.as(ActorDeclSyntax.self) {
             return d.declType
         }
         return .other
@@ -609,6 +615,48 @@ extension ClassDeclSyntax: DeclProtocol {
         return Int64(self.position.utf8Offset)
     }
     
+    func annotationMetadata(with annotation: String) -> AnnotationMetadata? {
+        return leadingTrivia.annotationMetadata(with: annotation)
+    }
+}
+
+// MARK: - Actor Support (Swift 5.5+)
+extension ActorDeclSyntax: DeclProtocol {
+    // The `name` property in DeclProtocol returns String, shadowing ActorDeclSyntax.name (TokenSyntax).
+    // We navigate to the name token via the actorKeyword's next sibling to avoid ambiguity.
+    private var actorNameText: String {
+        return actorKeyword.nextToken(viewMode: .all)?.text ?? ""
+    }
+
+    var fullName: String { return actorNameText }
+    var type: String { return actorNameText }
+    var isExprOrStmt: Bool { return false }
+    var isOverride: Bool { return false }
+    var name: String { return actorNameText }
+    var accessLevel: AccessLevel { return self.modifiers.acl }
+    var declType: DeclType { return .classType }  // Actors are reference types like classes
+
+    var boundTypes: [String] { return inheritedTypes }
+    var boundTypesAL: [String] { return boundTypes }
+
+    var refTypes: [String] {
+        return [boundTypesAL,
+                memberBlock.members.boundTypesAL,
+                attributes.tokens(viewMode: .all).exprTokenList
+            ].compactMap{$0}.flatMap{$0}
+    }
+
+    var inheritedTypes: [String] {
+        let actorName = actorNameText
+        return [genericParameterClause?.parameters.tokens(viewMode: .all).exprTokenList,
+                genericWhereClause?.tokens(viewMode: .all).exprTokenList,
+                inheritanceClause?.tokens(viewMode: .all).exprTokenList
+            ].compactMap{$0}.flatMap{$0}.filter{$0 != actorName}
+    }
+
+    var attributesDescription: String { self.attributes.trimmedDescription ?? "" }
+    var offset: Int64 { return Int64(self.position.utf8Offset) }
+
     func annotationMetadata(with annotation: String) -> AnnotationMetadata? {
         return leadingTrivia.annotationMetadata(with: annotation)
     }
