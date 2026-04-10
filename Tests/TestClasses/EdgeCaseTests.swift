@@ -226,4 +226,109 @@ class EdgeCaseTests: XCTestCase {
         XCTAssertTrue(result.contains("import MyOrgCore"),
                       "E12 FAILED: whitelisted-prefix module was removed. Got:\n\(result)")
     }
+
+    // E13: Conditional Compilation - import inside #if DEBUG should be preserved if compiled, or at least handled gracefully
+    func testE13_ConditionalCompilation() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            #if true
+            let a = LibClass()
+            #endif
+            """,
+            libContent: "public class LibClass {}"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E13 FAILED: Import inside #if block was removed. Got:\n\(result)")
+    }
+
+    // E14: Opaque and Existential Types `some Type` and `any Type`
+    func testE14_OpaqueAndExistentialTypes() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            func getObject() -> some LibProtocol { fatalError() }
+            func process(obj: any LibProtocol) {}
+            """,
+            libContent: "public protocol LibProtocol {}"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E14 FAILED: Import for some/any types was removed. Got:\n\(result)")
+    }
+
+    // E15: KeyPaths Usage
+    func testE15_KeyPathsUsage() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            let path = \\LibStruct.value
+            """,
+            libContent: "public struct LibStruct { public var value: Int = 0 }"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E15 FAILED: Import for KeyPath usage was removed. Got:\n\(result)")
+    }
+
+    // E16: Macro Usage (#Preview, @Attached)
+    func testE16_MacroUsage() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            #Preview { LibComponent() }
+            """,
+            libContent: "public struct LibComponent { public init() {} }"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E16 FAILED: Import for Macro usage was removed. Got:\n\(result)")
+    }
+
+    // E17: Top Level Declarations
+    func testE17_TopLevelDeclarations() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            let globalVar: LibClass = LibClass()
+            func globalFunc() -> LibClass { return LibClass() }
+            """,
+            libContent: "public class LibClass { public init() {} }"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E17 FAILED: Import for top level usage was removed. Got:\n\(result)")
+    }
+
+    // E18: Complex Closures
+    func testE18_ComplexClosures() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            let x = { (a: Int) -> LibClass in
+                return LibClass()
+            }
+            """,
+            libContent: "public class LibClass { public init() {} }"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E18 FAILED: Import for complex closure was removed. Got:\n\(result)")
+    }
+
+    // E19: Result Builders
+    func testE19_ResultBuilders() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            @ViewBuilder
+            func build() -> some Any {
+                LibStruct()
+            }
+            """,
+            libContent: "public struct LibStruct { public init() {} }"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E19 FAILED: Import for result builder usage was removed. Got:\n\(result)")
+    }
+
+    // E20: Tuple Types
+    func testE20_TupleTypes() {
+        let result = runImportRemovalRaw(
+            content: """
+            import Lib
+            func pair() -> (LibClass, Int) { return (LibClass(), 1) }
+            """,
+            libContent: "public class LibClass { public init() {} }"
+        )
+        XCTAssertTrue(result.contains("import Lib"), "E20 FAILED: Import for tuple types was removed. Got:\n\(result)")
+    }
 }
