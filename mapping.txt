@@ -1,0 +1,575 @@
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+BidirectionalCollection.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+CustomStringConvertible.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Subscripts.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+SubSequence.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Sendable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+CustomReflectable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Equatable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+SetAlgebra.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Partial RangeReplaceableCollection.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Initializers.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet.Index.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Hashable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Sequence.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+Codable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedSet/SortedSet+ExpressibleByArrayLiteral.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Sendable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Partial RangeReplaceableCollection.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+CustomReflectable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary.Index.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Subscripts.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Sequence.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Initializers.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+BidirectionalCollection.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+CustomStringConvertible.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Codable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Keys.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Values.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Equatable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+ExpressibleByDictionaryLiteral.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+SubSequence.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/SortedDictionary/SortedDictionary+Hashable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node+CustomDebugString.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+BidirectionalCollection.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node.Storage.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+CustomDebugStringConvertible.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node+Testing.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+Invariants.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_FixedSizeArray.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+SubSequence.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree.Index.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node.UnsafeHandle.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node.UnsafeHandle+Deletion.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node.Splinter.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree.Builder.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node.UnsafeHandle+Insertion.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+CustomReflectable.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+UnsafeCursor.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+Partial RangeReplaceableCollection.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_BTree+Sequence.swift:SortedCollections
+../swift-collections/Sources/SortedCollections/BTree/_Node.UnsafeHandle+CustomDebugStringConvertible.swift:SortedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Equatable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+ExpressibleByDictionaryLiteral.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Hashable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Deprecations.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Initializers.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Elements.SubSequence.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+CustomReflectable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Sequence.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Partial RangeReplaceableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Elements.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Codable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Invariants.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Values.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Sendable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Descriptions.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Partial MutableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra symmetricDifference.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+RandomAccessCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Descriptions.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isEqualSet.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Diffing.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+UnstableInternals.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Invariants.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Hashable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isStrictSubset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Insertions.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isSubset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Codable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isSuperset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Equatable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Initializers.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+UnorderedView.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+ExpressibleByArrayLiteral.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+SubSequence.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial MutableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Sendable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Testing.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formUnion.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+CustomReflectable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+ReserveCapacity.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra union.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formIntersection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial RangeReplaceableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra+Basics.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra subtracting.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formSymmetricDifference.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra intersection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra subtract.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isDisjoint.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isStrictSuperset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/Utilities/_UnsafeBitset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+UnsafeHandle.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+Bucket.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+Constants.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_Hashtable+Header.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+Testing.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+CustomStringConvertible.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+BucketIterator.swift:OrderedCollections
+../swift-collections/Sources/InternalCollectionsUtilities/UnsafeMutableRawBufferPointer+Extras.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/UnsafeMutableBufferPointer+Extras.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/Span+Extras.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/UnsafeRawBufferPointer+Extras.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/UnsafeBufferPointer+Extras.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/String+Padding.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/_SortedCollection.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/RandomAccessCollection+Offsets.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/Descriptions.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/LifetimeOverride.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/Debugging.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/_UniqueCollection.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/IntegerTricks/UInt+reversed.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/IntegerTricks/Integer rank.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/IntegerTricks/UInt+first and last set bit.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/IntegerTricks/FixedWidthInteger+roundUpToPowerOfTwo.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/UnsafeBitSet/_UnsafeBitSet+Index.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/UnsafeBitSet/_UnsafeBitSet.swift:InternalCollectionsUtilities
+../swift-collections/Sources/InternalCollectionsUtilities/UnsafeBitSet/_UnsafeBitSet+_Word.swift:InternalCollectionsUtilities
+../swift-collections/Sources/DequeModule/_UnsafeDequeSegments.swift:DequeModule
+../swift-collections/Sources/DequeModule/_UnsafeDequeHandle.swift:DequeModule
+../swift-collections/Sources/DequeModule/_DequeSlot.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Experimental.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Append.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Container.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Replacements.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Initializers.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Testing.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Hashable.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Insertions.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Consumption.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Equatable.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Prepend.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Descriptions.swift:DequeModule
+../swift-collections/Sources/DequeModule/RigidDeque/RigidDeque+Removals.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Container.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Descriptions.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Hashable.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Initializers.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Insertions.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Replacements.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Prepend.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Append.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Equatable.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Removals.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Experimental.swift:DequeModule
+../swift-collections/Sources/DequeModule/UniqueDeque/UniqueDeque+Consumption.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/_DequeBuffer.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+Collection.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+CustomReflectable.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+Hashable.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/_DequeBufferHeader.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+Codable.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+Testing.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque._UnsafeHandle.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+Descriptions.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+Extras.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+ExpressibleByArrayLiteral.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque+Equatable.swift:DequeModule
+../swift-collections/Sources/DequeModule/Deque/Deque._Storage.swift:DequeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Metrics.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Index.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Summary.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Contents.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Invariants.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Ingester.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Debugging.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Basics/BigString+Builder.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Append and Insert.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Index.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Counts.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Character.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+UTF16.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+UTF8.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+UnicodeScalar.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Description.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Splitting.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+Breaks.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Chunk/BigString+Chunk+RopeElement.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/BigString+Split.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/BigString+Managing Breaks.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/BigString+RemoveSubrange.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/BigString+ReplaceSubrange.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/BigString+Insert.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/BigString+Initializers.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/Range+BigString.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Operations/BigString+Append.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Views/BigString+UnicodeScalarView.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Views/BigString+UTF8View.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Views/BigSubstring+UnicodeScalarView.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Views/BigSubstring.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Views/BigSubstring+UTF16View.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Views/BigString+UTF16View.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Views/BigSubstring+UTF8View.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Hashing.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+CustomStringConvertible.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+BidirectionalCollection.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+CustomDebugStringConvertible.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Equatable.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+TextOutputStream.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+LosslessStringConvertible.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Sequence.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+ExpressibleByStringLiteral.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+RangeReplaceableCollection.swift:RopeModule
+../swift-collections/Sources/RopeModule/BigString/Conformances/BigString+Comparable.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/RopeMetric.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/_RopeItem.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope+Debugging.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/_RopeVersion.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/RopeElement.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope+_UnsafeHandle.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope+_Storage.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope+Invariants.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope+_UnmanagedLeaf.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/RopeSummary.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope+Builder.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/_RopePath.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Basics/Rope+_Node.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+Extract.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+Append.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+Split.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+Find.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+Insert.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+ForEachWhile.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+MutatingForEach.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+Join.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+Remove.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Operations/Rope+RemoveSubrange.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Conformances/Rope+Index.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Conformances/Rope+Sequence.swift:RopeModule
+../swift-collections/Sources/RopeModule/Rope/Conformances/Rope+Collection.swift:RopeModule
+../swift-collections/Sources/RopeModule/Utilities/String Utilities.swift:RopeModule
+../swift-collections/Sources/RopeModule/Utilities/_CharacterRecognizer.swift:RopeModule
+../swift-collections/Sources/RopeModule/Utilities/String.Index+ABI.swift:RopeModule
+../swift-collections/Sources/RopeModule/Utilities/Optional Utilities.swift:RopeModule
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Consumption.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Resizing.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Insertions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Keys.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Lookup.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Initializers.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Equatable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Indices.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Hashable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Index.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Removals.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidDictionary/RigidDictionary+Debugging.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Hashable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Insertions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Lookup.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Initializers.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+BorrowingSequence.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Consumption.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Removals.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Resizing.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Debugging.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Index.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidSet/RigidSet+Equatable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Removals.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Container.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Deprecated.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Descriptions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Hashable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Experimental.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Equatable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Insertions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Initializers.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Replacements.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Consumption.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/RigidArray/RigidArray+Append.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Resizing.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Bucket.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Find.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Debug.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Iteration.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Insert.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Sizing.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Bitmap.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Consumption.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/HashTable/_HTable+Removal.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Append.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Container.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Removals.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Replacements.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Initializers.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Hashable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Experimental.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Deprecated.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Consumption.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Descriptions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Equatable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueArray/UniqueArray+Insertions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Insertions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Consumption.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Initializers.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Lookup.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Resizing.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Removals.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Debugging.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+BorrowingSequence.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Equatable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Hashable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueSet/UniqueSet+Index.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Resizing.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Keys.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Initializers.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Lookup.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Consumption.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Indices.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Hashable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Equatable.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Debugging.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Insertions.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Index.swift:BasicContainers
+../swift-collections/Sources/BasicContainers/UniqueDictionary/UniqueDictionary+Removals.swift:BasicContainers
+../swift-collections/Sources/TrailingElementsModule/TrailingElements.swift:TrailingElementsModule
+../swift-collections/Sources/TrailingElementsModule/TrailingArray.swift:TrailingElementsModule
+../swift-collections/Sources/TrailingElementsModule/TrailingPadding.swift:TrailingElementsModule
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra symmetricDifference.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formIntersection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Codable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra conformance.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra subtract.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Sorted Collection APIs.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formUnion.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isStrictSuperset.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Extras.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formSymmetricDifference.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+ExpressibleByArrayLiteral.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isEqualSet.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+BidirectionalCollection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+CustomStringConvertible.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Random.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet.Counted.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+CustomDebugStringConvertible.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+CustomReflectable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Initializers.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isSubset.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet.Index.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra basics.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isDisjoint.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra union.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Equatable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isSuperset.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra subtracting.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra intersection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet._UnsafeHandle.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Hashable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Invariants.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isStrictSubset.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/Slice+Utilities.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/Range+Utilities.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/UInt+Tricks.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/_Word.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Descriptions.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+ChunkedBitsIterators.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+CustomReflectable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+BitwiseOperations.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Invariants.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BinaryInteger extensions.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Fill.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Shifts.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+RandomBits.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Collection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Extras.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+ExpressibleByArrayLiteral.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Codable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+RangeReplaceableCollection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Initializers.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+LosslessStringConvertible.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray._UnsafeHandle.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Copy.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Hashable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Equatable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+ExpressibleByStringLiteral.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Testing.swift:BitCollections
+../swift-collections/Sources/ContainersPreview/Types/Shared.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Types/Box.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Types/Borrow.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Types/InputSpan.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Types/Inout.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Types/SpanIterator.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Extensions/TemporaryAllocation.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Extensions/OutputSpan+Extras.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingSequence+Utilities.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingIteratorProtocol+Copy.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Drain+Map.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Producer+Map.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Producer.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Drain+Reduce.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingIteratorProtocol.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Producer+Collect.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingSequence+Algorithms.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Producer+Reduce.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Producer+Filter.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingIteratorProtocol+ElementsEqual.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingIteratorProtocol+Reduce.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingSequence.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingIteratorProtocol+Filter.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingIteratorProtocol+Map.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingSequence+Standard Conformances.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/BorrowingIteratorProtocol+SpanwiseZip.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Drain.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/ContainerIterator.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/Container.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/RandomAccessContainer.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/Container+Filter.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/MutableContainer.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/BidirectionalContainer.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/DynamicContainer.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/RangeExpression2.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/Container+SpanwiseZip.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/PermutableContainer.swift:ContainersPreview
+../swift-collections/Sources/ContainersPreview/Protocols/Container/RangeReplaceableContainer.swift:ContainersPreview
+../swift-collections/Sources/Collections/HashTreeCollections reexports.swift:Collections
+../swift-collections/Sources/Collections/BitCollections reexports.swift:Collections
+../swift-collections/Sources/Collections/DequeModule reexports.swift:Collections
+../swift-collections/Sources/Collections/OrderedCollections reexports.swift:Collections
+../swift-collections/Sources/Collections/HeapModule reexports.swift:Collections
+../swift-collections/Sources/HashTreeCollections/HashNode/_Hash.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural intersection.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashTreeIterator.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural isDisjoint.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_RawHashNode.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural compactMapValues.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_AncestorHashSlots.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashTreeStatistics.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural subtracting.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Subtree Removals.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNodeHeader.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural mapValues.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Initializers.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_Bucket.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashStack.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Primitive Insertions.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Debugging.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Subtree Insertions.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural merge.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Builder.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_RawHashNode+UnsafeHandle.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Invariants.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural filter.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Lookups.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashSlot.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashLevel.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_Bitmap.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural isSubset.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_UnsafePath.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Primitive Replacement.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Subtree Modify.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural isEqualSet.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_UnmanagedHashNode.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural union.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Structural symmetricDifference.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+UnsafeHandle.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Storage.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/HashNode/_HashNode+Primitive Removals.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isEqualSet.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Descriptions.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isStrictSubset.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Sendable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Equatable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra intersection.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra formUnion.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Extras.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra subtracting.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra subtract.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Debugging.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isStrictSuperset.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra formIntersection.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isSuperset.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+CustomReflectable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra formSymmetricDifference.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Collection.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+ExpressibleByArrayLiteral.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra symmetricDifference.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra basics.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Sequence.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Filter.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra Initializers.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Hashable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+Codable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isSubset.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra union.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeSet/TreeSet+SetAlgebra isDisjoint.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Equatable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Sequence.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Filter.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Codable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Descriptions.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Debugging.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Hashable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+CustomReflectable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+ExpressibleByDictionaryLiteral.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Values.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Sendable.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Merge.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Collection.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+MapValues.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Initializers.swift:HashTreeCollections
+../swift-collections/Sources/HashTreeCollections/TreeDictionary/TreeDictionary+Keys.swift:HashTreeCollections
+../swift-collections/Sources/HeapModule/_HeapNode.swift:HeapModule
+../swift-collections/Sources/HeapModule/Heap+UnsafeHandle.swift:HeapModule
+../swift-collections/Sources/HeapModule/Heap+Descriptions.swift:HeapModule
+../swift-collections/Sources/HeapModule/Heap+Invariants.swift:HeapModule
+../swift-collections/Sources/HeapModule/Heap.swift:HeapModule
+../swift-collections/Sources/HeapModule/Heap+ExpressibleByArrayLiteral.swift:HeapModule
+../swift-collections/Benchmarks/Sources/benchmark-tool/main.swift:benchmark-tool
+../swift-collections/Benchmarks/Sources/memory-benchmark/DictionaryStatistics.swift:memory-benchmark
+../swift-collections/Benchmarks/Sources/memory-benchmark/MemoryBenchmarks.swift:memory-benchmark
+../swift-collections/Benchmarks/Sources/Benchmarks/Kalimba.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/SetBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/ShareableSetBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/OrderedDictionaryBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/ArrayBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/DequeBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/UniqueDequeBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/BitsetBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/SortedDictionaryBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/CustomGenerators.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/RigidDequeBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/ShareableDictionaryBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/DictionaryBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/HeapBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/OrderedSetBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/BigStringBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/SortedSetBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Rust/RustBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Rust/RustVecDequeBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Foundation/CFBitVectorBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Foundation/CFBinaryHeapBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Foundation/FoundationBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppUnorderedSetBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppPriorityQueueBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppMapBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppUnorderedMapBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppVectorBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppDequeBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/Benchmarks/Cpp/CppVectorBoolBenchmarks.swift:Benchmarks
+../swift-collections/Benchmarks/Sources/RustBenchmarks/dummy.swift:RustBenchmarks
+../swift-collections/Benchmarks/Plugins/RustBuild/RustBuild.swift:RustBuild

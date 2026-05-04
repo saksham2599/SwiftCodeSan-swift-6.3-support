@@ -60,7 +60,9 @@ public final class ImportRewriter: SyntaxRewriter {
         }
 
         if unused.contains(moduleName) {
-            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
+            return DeclSyntax(MissingDeclSyntax(placeholder: .identifier(""))
+                .with(\.leadingTrivia, node.leadingTrivia)
+                .with(\.trailingTrivia, node.trailingTrivia))
         }
 
         return super.visit(node)
