@@ -30,6 +30,15 @@ final class RefChecker: SyntaxVisitor {
     var refs: Set<String> {
         return Set(reflist)
     }
+    private var inlinableReflist = [String]()
+    var inlinableRefs: Set<String> {
+        return Set(inlinableReflist)
+    }
+    
+    private var inlinableStack = [Bool]()
+    private var isInlinable: Bool {
+        return inlinableStack.last ?? false
+    }
     
     init(_ path: String, module: String, declMap: DeclMap) {
         self.path = path
@@ -38,9 +47,16 @@ final class RefChecker: SyntaxVisitor {
         super.init(viewMode: .all)
     }
 
+    private func addRefs(_ newRefs: [String]) {
+        reflist.append(contentsOf: newRefs)
+        if isInlinable {
+            inlinableReflist.append(contentsOf: newRefs)
+        }
+    }
+
     override func visit(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
         if node.item.is(ExprSyntax.self) || node.item.is(StmtSyntax.self) {
-            reflist.append(contentsOf: node.item.referencedTypes(with: declMap, allowUnknown: true))
+            addRefs(node.item.referencedTypes(with: declMap, allowUnknown: true))
             return .skipChildren
         }
 
@@ -48,73 +64,94 @@ final class RefChecker: SyntaxVisitor {
     }
 
     override func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         if node.isOverride {
-            reflist.append(node.name)
+            addRefs([node.name])
         }
 
         return .visitChildren
     }
 
     override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        let nodeInlinable = node.attributesDescription.contains(String.inlinable)
+        inlinableStack.append(isInlinable || nodeInlinable)
+        
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         if node.isOverride {
-            reflist.append(node.name)
+            addRefs([node.name])
         }
         return .visitChildren
+    }
+    
+    override func visitPost(_ node: FunctionDeclSyntax) {
+        inlinableStack.removeLast()
     }
 
     override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        let nodeInlinable = node.attributesDescription.contains(String.inlinable)
+        inlinableStack.append(isInlinable || nodeInlinable)
+        
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
+    }
+    
+    override func visitPost(_ node: SubscriptDeclSyntax) {
+        inlinableStack.removeLast()
     }
 
     override func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        let nodeInlinable = node.attributesDescription.contains(String.inlinable)
+        inlinableStack.append(isInlinable || nodeInlinable)
+        
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         if node.isOverride {
-            reflist.append(node.name)
+            addRefs([node.name])
         }
         return .visitChildren
     }
+    
+    override func visitPost(_ node: InitializerDeclSyntax) {
+        inlinableStack.removeLast()
+    }
 
     override func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
-         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+         addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
          return .visitChildren
      }
 
     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
     override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
-        reflist.append(node.name)
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs([node.name])
         return .visitChildren
     }
     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
     override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
     override func visit(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
 
     override func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
 
     override func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
-        reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+        addRefs(node.referencedTypes(with: declMap, allowUnknown: true))
         return .visitChildren
     }
 

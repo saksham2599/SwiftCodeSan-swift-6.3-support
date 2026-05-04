@@ -1,0 +1,62 @@
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Equatable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+ExpressibleByDictionaryLiteral.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Hashable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Deprecations.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Initializers.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Elements.SubSequence.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+CustomReflectable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Sequence.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Partial RangeReplaceableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Elements.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Codable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Invariants.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Values.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Sendable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Descriptions.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary+Partial MutableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedDictionary/OrderedDictionary.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra symmetricDifference.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+RandomAccessCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Descriptions.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isEqualSet.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Diffing.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+UnstableInternals.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Invariants.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Hashable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isStrictSubset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Insertions.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isSubset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Codable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isSuperset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Equatable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Initializers.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+UnorderedView.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+ExpressibleByArrayLiteral.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+SubSequence.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial MutableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Sendable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Testing.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formUnion.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+CustomReflectable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+ReserveCapacity.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra union.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formIntersection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial RangeReplaceableCollection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra+Basics.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra subtracting.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formSymmetricDifference.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra intersection.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra subtract.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isDisjoint.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isStrictSuperset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/Utilities/_UnsafeBitset.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+UnsafeHandle.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+Bucket.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+Constants.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_Hashtable+Header.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+Testing.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+CustomStringConvertible.swift:OrderedCollections
+../swift-collections/Sources/OrderedCollections/HashTable/_HashTable+BucketIterator.swift:OrderedCollections
+../swift-collections/Sources/Collections/OrderedCollections reexports.swift:Collections

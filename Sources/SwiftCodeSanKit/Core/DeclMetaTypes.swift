@@ -82,6 +82,11 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
     var encloser: String
     var declDescription: String
     var annotated: Bool = false
+    var isInlinable: Bool = false
+    var isUsableFromInline: Bool = false
+    var isFrozen: Bool = false
+    var isSPI: Bool = false
+    var isAlwaysEmitIntoClient: Bool = false
 
     var isOverride: Bool
     var isExtensionMember: Bool = false
@@ -145,7 +150,12 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
                 accessLevel: AccessLevel,
                 isOverride: Bool,
                 annotated: Bool = false,
-                used: Bool) {
+                isInlinable: Bool = false,
+                isUsableFromInline: Bool = false,
+                isFrozen: Bool = false,
+                isSPI: Bool = false,
+                isAlwaysEmitIntoClient: Bool = false,
+                used: Bool = false) {
         self.path = path
         self.module = module
         self.package = package
@@ -162,6 +172,12 @@ public final class DeclMetadata: Hashable, @unchecked Sendable {
         self.annotated = annotated
         self.accessLevel = accessLevel
         self.isOverride = isOverride
+        self.isInlinable = isInlinable
+        self.isUsableFromInline = isUsableFromInline
+        self.isFrozen = isFrozen
+        self.isSPI = isSPI
+        self.isAlwaysEmitIntoClient = isAlwaysEmitIntoClient
+        self.used = used
     }
 }
 
@@ -248,24 +264,23 @@ public struct Whitelist: Sendable {
 public func flatten(declMap: DeclMap) -> DeclMap {
     var flatDeclMap = DeclMap()
 
-    for (k, vals) in declMap {
-        for v in vals {
-            if flatDeclMap[k] == nil {
-                flatDeclMap[k] = []
-            }
-
-            if flatDeclMap[k]?.contains(v) ?? false {
-            } else {
-                flatDeclMap[k]?.append(v)
-            }
-
-            for m in v.members {
-                if flatDeclMap[m.name] == nil {
-                    flatDeclMap[m.name] = []
-                }
-                flatDeclMap[m.name]?.append(m)
-            }
+    func addDecl(_ decl: DeclMetadata) {
+        if flatDeclMap[decl.name] == nil {
+            flatDeclMap[decl.name] = []
+        }
+        if !(flatDeclMap[decl.name]?.contains(decl) ?? false) {
+            flatDeclMap[decl.name]?.append(decl)
+        }
+        for m in decl.members {
+            addDecl(m)
         }
     }
+
+    for (_, vals) in declMap {
+        for v in vals {
+            addDecl(v)
+        }
+    }
+
     return flatDeclMap
 }

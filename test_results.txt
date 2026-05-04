@@ -1,0 +1,204 @@
+Test Suite 'Selected tests' started at 2026-04-10 09:35:11.928.
+Test Suite 'SwiftCodeSanPackageTests.xctest' started at 2026-04-10 09:35:11.928.
+Test Suite 'DeadCodeTests' started at 2026-04-10 09:35:11.928.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD10_UsedEnumPreserved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD10_UsedEnumPreserved]' passed (0.034 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD1_UnusedPublicClassRemoved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD1_UnusedPublicClassRemoved]' passed (0.002 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD2_UsedPublicClassPreserved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD2_UsedPublicClassPreserved]' passed (0.003 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD3_DeadCycleRemoved]' started.
+/Users/sakshamgoyal/development/SwiftCodeSan/Tests/TestClasses/DeadCodeTests.swift:87: error: -[SwiftCodeSanTests.DeadCodeTests testD3_DeadCycleRemoved] : XCTAssertFalse failed - D3 FAILED: Class A in cycle not removed.
+/Users/sakshamgoyal/development/SwiftCodeSan/Tests/TestClasses/DeadCodeTests.swift:88: error: -[SwiftCodeSanTests.DeadCodeTests testD3_DeadCycleRemoved] : XCTAssertFalse failed - D3 FAILED: Class B in cycle not removed.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD3_DeadCycleRemoved]' failed (0.044 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD4_MemberAccessPreserved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD4_MemberAccessPreserved]' passed (0.008 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD5_ExtensionMemberPreserved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD5_ExtensionMemberPreserved]' passed (0.003 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD6_UnusedActorRemoved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD6_UnusedActorRemoved]' passed (0.002 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD7_UsedActorPreserved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD7_UsedActorPreserved]' passed (0.004 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD8_UsedTypealiasPreserved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD8_UsedTypealiasPreserved]' passed (0.004 seconds).
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD9_UsedProtocolPreserved]' started.
+Test Case '-[SwiftCodeSanTests.DeadCodeTests testD9_UsedProtocolPreserved]' passed (0.004 seconds).
+Test Suite 'DeadCodeTests' failed at 2026-04-10 09:35:12.038.
+	 Executed 10 tests, with 2 failures (0 unexpected) in 0.109 (0.109) seconds
+Test Suite 'SwiftCodeSanPackageTests.xctest' failed at 2026-04-10 09:35:12.038.
+	 Executed 10 tests, with 2 failures (0 unexpected) in 0.109 (0.110) seconds
+Test Suite 'Selected tests' failed at 2026-04-10 09:35:12.038.
+	 Executed 10 tests, with 2 failures (0 unexpected) in 0.109 (0.110) seconds
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.026425957679748535"]
+["Scanned paths: 2, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.0009330511093139648"]
+["Look up interface members and mark used if any..."]
+["Took 1.3947486877441406e-05"]
+["Mark bound types used..."]
+["Took 1.800060272216797e-05"]
+["Filter out used decls..."]
+["Took 9.059906005859375e-06"]
+["#Total top-level decls: ", 2, "#Total decls", 3, "#Decls Unused", 1, "#Decls Used", 2, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.0022339820861816406"]
+["Done"] 0.029639005661010742
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.0010849237442016602"]
+["Took 0.0007150173187255859"]
+["Scanned paths: 1, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.00019109249114990234"]
+["Look up interface members and mark used if any..."]
+["Took 8.940696716308594e-06"]
+["Mark bound types used..."]
+["Took 7.987022399902344e-06"]
+["Filter out used decls..."]
+["Took 7.033348083496094e-06"]
+["#Total top-level decls: ", 1, "#Total decls", 1, "#Decls Unused", 1, "#Decls Used", 0, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.0004589557647705078"]
+["Done"] 0.032112956047058105
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.001042008399963379"]
+["Took 0.0011080503463745117"]
+["Scanned paths: 2, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.00041794776916503906"]
+["Look up interface members and mark used if any..."]
+["Took 1.0013580322265625e-05"]
+["Mark bound types used..."]
+["Took 9.059906005859375e-06"]
+["Filter out used decls..."]
+["Took 7.987022399902344e-06"]
+["#Total top-level decls: ", 2, "#Total decls", 2, "#Decls Unused", 1, "#Decls Used", 1, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.0005279779434204102"]
+["Done"] 0.03523600101470947
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.0007280111312866211"]
+["Took 0.00055694580078125"]
+["Scanned paths: 1, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.0004850625991821289"]
+["Look up interface members and mark used if any..."]
+["Took 1.0013580322265625e-05"]
+["Mark bound types used..."]
+["Took 1.1920928955078125e-05"]
+["Filter out used decls..."]
+["Took 1.0013580322265625e-05"]
+["#Total top-level decls: ", 2, "#Total decls", 4, "#Decls Unused", 2, "#Decls Used", 2, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.0007779598236083984"]
+["Done"] 0.037814974784851074
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.04310309886932373"]
+["Took 0.004292964935302734"]
+["Scanned paths: 2, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.0011609792709350586"]
+["Look up interface members and mark used if any..."]
+["Took 1.0967254638671875e-05"]
+["Mark bound types used..."]
+["Took 1.4066696166992188e-05"]
+["Filter out used decls..."]
+["Took 1.0013580322265625e-05"]
+["#Total top-level decls: ", 3, "#Total decls", 4, "#Decls Unused", 1, "#Decls Used", 3, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.0008949041366577148"]
+["Done"] 0.08730292320251465
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.0011780261993408203"]
+["Took 0.0014439821243286133"]
+["Scanned paths: 2, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.000861048698425293"]
+["Look up interface members and mark used if any..."]
+["Took 1.5020370483398438e-05"]
+["Mark bound types used..."]
+["Took 1.2040138244628906e-05"]
+["Filter out used decls..."]
+["Took 6.9141387939453125e-06"]
+["#Total top-level decls: ", 3, "#Total decls", 4, "#Decls Unused", 0, "#Decls Used", 4, "#Files to update", 0]
+["Remove unused decls from files...", 0]
+["Took 1.5974044799804688e-05"]
+["Done"] 0.09083294868469238
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.0008310079574584961"]
+["Took 0.0010180473327636719"]
+["Scanned paths: 1, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.00019502639770507812"]
+["Look up interface members and mark used if any..."]
+["Took 7.987022399902344e-06"]
+["Mark bound types used..."]
+["Took 7.033348083496094e-06"]
+["Filter out used decls..."]
+["Took 7.987022399902344e-06"]
+["#Total top-level decls: ", 1, "#Total decls", 1, "#Decls Unused", 1, "#Decls Used", 0, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.00044095516204833984"]
+["Done"] 0.09334301948547363
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.0010039806365966797"]
+["Took 0.0011110305786132812"]
+["Scanned paths: 2, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.0009520053863525391"]
+["Look up interface members and mark used if any..."]
+["Took 8.940696716308594e-06"]
+["Mark bound types used..."]
+["Took 1.0013580322265625e-05"]
+["Filter out used decls..."]
+["Took 9.059906005859375e-06"]
+["#Total top-level decls: ", 2, "#Total decls", 3, "#Decls Unused", 1, "#Decls Used", 2, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.0006920099258422852"]
+["Done"] 0.0971299409866333
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.0009800195693969727"]
+["Took 0.001622915267944336"]
+["Scanned paths: 2, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.00044906139373779297"]
+["Look up interface members and mark used if any..."]
+["Took 8.940696716308594e-06"]
+["Mark bound types used..."]
+["Took 1.0013580322265625e-05"]
+["Filter out used decls..."]
+["Took 7.987022399902344e-06"]
+["#Total top-level decls: ", 2, "#Total decls", 2, "#Decls Unused", 1, "#Decls Used", 1, "#Files to update", 1]
+["Remove unused decls from files...", 1]
+["Took 0.0005620718002319336"]
+["Done"] 0.10077095031738281
+["Start of removing dead code: topDeclsOnly", false]
+["Scan and map top-level decls..."]
+["Took 0.0010429620742797852"]
+["Took 0.001623988151550293"]
+["Scanned paths: 2, Whitelisted paths: 0"]
+["Check references, look up their source modules, and mark used..."]
+["Took 0.0006519556045532227"]
+["Look up interface members and mark used if any..."]
+["Took 1.2040138244628906e-05"]
+["Mark bound types used..."]
+["Took 1.0013580322265625e-05"]
+["Filter out used decls..."]
+["Took 1.0967254638671875e-05"]
+["#Total top-level decls: ", 2, "#Total decls", 4, "#Decls Unused", 3, "#Decls Used", 1, "#Files to update", 2]
+["Remove unused decls from files...", 2]
+["Took 0.0011540651321411133"]
+["Done"] 0.10527801513671875
+◇ Test run started.
+↳ Testing Library Version: 1743
+↳ Target Platform: arm64e-apple-macos14.0
+✔ Test run with 0 tests in 0 suites passed after 0.001 seconds.

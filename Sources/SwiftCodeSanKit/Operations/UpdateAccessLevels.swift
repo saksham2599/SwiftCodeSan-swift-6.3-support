@@ -15,6 +15,21 @@
 //
 
 import Foundation
+private let thinProtocols: Set<String> = [
+    "Sendable", "Equatable", "Hashable", "Comparable", "CustomStringConvertible",
+    "CustomDebugStringConvertible", "CustomReflectable", "Encodable", "Decodable",
+    "Codable", "Identifiable", "Error", "AnyObject", "Copyable", "Escapable",
+    "BitwiseCopyable", "CaseIterable", "RawRepresentable", "ExpressibleByArrayLiteral",
+    "ExpressibleByStringLiteral", "ExpressibleByDictionaryLiteral", "ExpressibleByIntegerLiteral",
+    "ExpressibleByFloatLiteral", "ExpressibleByBooleanLiteral", "ExpressibleByNilLiteral"
+]
+
+private let thinProtocolRequirements: Set<String> = [
+    "==", "!=", "hash", "hashValue", "description", "debugDescription",
+    "encode", "id", "allCases", "rawValue", "subscript", "customMirror",
+    "makeIterator", "next", "compare", "advanced", "distance", "count", "isEmpty"
+]
+
 
 nonisolated(unsafe) private var nref = 0
 
@@ -40,10 +55,10 @@ public func updateAccessLevels(filesToModules: [String: String],
     logTime()
     
     log("Check references, look up their source modules, and mark visibility...")
-    p.checkRefs(fileToModuleMap: filesToModules, declMap: declMap) { @Sendable (path, refs, imports) in
+    p.checkRefs(fileToModuleMap: filesToModules, declMap: declMap) { @Sendable (path, refs, inlinableRefs, imports) in
         if let refModule = filesToModules[path] {
             let refPackage = modulesToPackages?[refModule]
-            markVisiblity(refs, in: refModule, package: refPackage, imports: imports, with: declMap, updateMembers: true)
+            markVisiblity(refs, inlinableRefs: inlinableRefs, in: refModule, package: refPackage, imports: imports, with: declMap, updateMembers: true)
         }
     }
     
@@ -61,10 +76,10 @@ public func updateAccessLevels(filesToModules: [String: String],
     log("Flatten decls, and check references again, for member decls...")
     nref = 0
     let flatDeclMap = flatten(declMap: declMap)
-    p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { @Sendable (path, refs, imports) in
+    p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { @Sendable (path, refs, inlinableRefs, imports) in
         if let refModule = filesToModules[path] {
             let refPackage = modulesToPackages?[refModule]
-            markVisiblity(refs, in: refModule, package: refPackage, imports: imports, with: flatDeclMap, updateMembers: false)
+            markVisiblity(refs, inlinableRefs: inlinableRefs, in: refModule, package: refPackage, imports: imports, with: flatDeclMap, updateMembers: false)
         }
         log(counter: &nref, interval: 1000)
     }
@@ -160,14 +175,17 @@ private func updateBoundTypeALs(_ decl: DeclMetadata, level: Int, declMap: DeclM
             
             if let boundDecls = declMap[key] {
                 for boundDecl in boundDecls {
-                    if boundDecl.visited, boundDecl.shouldExpose {
-                        continue
-                    }
-                    boundDecl.visited = true
-                    if decl.module == boundDecl.module || decl.imports.contains(boundDecl.module) {
-                        boundDecl.shouldExpose = true
-                        boundDecl.updateTargetAccessLevel(to: .internal)
-                        updateBoundTypeALs(boundDecl, level: level + 1, declMap: declMap)
+                    let target = decl.targetAccessLevel ?? .internal
+                    let requiredAL: AccessLevel = target >= .package ? target : .internal
+                    
+                    let didPromote = boundDecl.updateTargetAccessLevel(to: requiredAL)
+                    
+                    if !boundDecl.visited || didPromote {
+                        boundDecl.visited = true
+                        if decl.module == boundDecl.module || decl.imports.contains(boundDecl.module) {
+                            boundDecl.shouldExpose = true
+                            updateBoundTypeALs(boundDecl, level: level + 1, declMap: declMap)
+                        }
                     }
                 }
             }
@@ -199,7 +217,8 @@ private func updateBoundMemberALs(key cur: DeclMetadata,
     if curIsExtension {
         parents.append(cur.name)
     }
-    resolveInheritance(key: cur, inheritedTypes: parents, declMap: declMap, level: level, members: &members, interfaceMembers: &interfaceMembers)
+    var visited = Set<DeclMetadata>()
+            resolveInheritance(target: cur, exploring: cur, declMap: declMap, level: level, members: &members, interfaceMembers: &interfaceMembers, visited: &visited, isSibling: false)
     
     let interfaceMemberNames = interfaceMembers.map{$0.name}
     for member in members {
@@ -261,71 +280,83 @@ private func updateBoundMemberALs(key cur: DeclMetadata,
 }
 
 
-private func resolveInheritance(key cur: DeclMetadata,
-                                inheritedTypes: [String]?,
+
+
+
+private func resolveInheritance(target: DeclMetadata,
+                                exploring: DeclMetadata,
                                 declMap: DeclMap,
                                 level: Int,
                                 members: inout [DeclMetadata],
-                                interfaceMembers: inout [DeclMetadata]) {
+                                interfaceMembers: inout [DeclMetadata],
+                                visited: inout Set<DeclMetadata>,
+                                isSibling: Bool = false) {
     
-    let parents = inheritedTypes ?? cur.inheritedTypes
-    var stdlibTypes = [String]()
-    var userDefinedTypes = [String]()
+    if visited.contains(exploring) { return }
+    visited.insert(exploring)
     
-    for parent in parents {
-        if parent.isEmpty {
-            continue
-        }
+    // Vertical inheritance (parents)
+    for parent in exploring.inheritedTypes {
+        if parent.isEmpty { continue }
         if let parentDecls = declMap[parent] {
             for parentDecl in parentDecls {
-                if parentDecl.name.isEmpty {
-                    continue
-                }
+                if parentDecl.name.isEmpty { continue }
                 if parentDecl.declType == .protocolType || parentDecl.declType == .classType || parentDecl.declType == .typealiasType {
                     if parentDecl.accessLevel >= .package, parentDecl.shouldExpose {
                         if parentDecl.declType == .protocolType {
                             interfaceMembers.append(contentsOf: parentDecl.members)
-                        } else if parentDecl.declType == .classType, cur.declType == .classType {
+                        } else if parentDecl.declType == .classType, target.declType == .classType {
                             interfaceMembers.append(contentsOf: parentDecl.members)
                         }
                     }
                     
-                    userDefinedTypes.append(parentDecl.name)
-                    members.append(contentsOf: cur.members)
-                    
+                    members.append(contentsOf: target.members)
                     let optionalInitialTypes = parentDecl.declType == .typealiasType ? parentDecl.boundTypesAL : nil
-                    
-                    resolveInheritance(key: parentDecl, inheritedTypes: optionalInitialTypes, declMap: declMap, level: level+1, members: &members,  interfaceMembers: &interfaceMembers)
-                    
-                } else if parentDecl.declType == .extensionType {
-                    // Parent could be a user defined type or a stdlib type. Add to a list for now and filter out below.
-                    stdlibTypes.append(parentDecl.name)
+                    resolveInheritance(target: target, exploring: parentDecl, declMap: declMap, level: level+1, members: &members, interfaceMembers: &interfaceMembers, visited: &visited, isSibling: isSibling)
                 }
             }
         } else {
-            // If parent is not in declMap, assume it's in stdlib.
-            stdlibTypes.append(parent)
-        }
-    }
-    
-    for stdlibType in stdlibTypes {
-        if userDefinedTypes.contains(stdlibType) {
-            continue
-        }
-        
-        for member in cur.members {
-            if member.accessLevel >= .package {
-                member.shouldExpose = true
-                member.updateTargetAccessLevel(to: member.accessLevel)
-                interfaceMembers.append(member)
-                members.append(member)
+            // Stdlib type found
+            let stdlibType = parent
+            let isThin = thinProtocols.contains(stdlibType) || stdlibType.hasPrefix("~")
+            
+            // lateral (sibling) conformances only protect the main type OR files that mention the protocol name.
+            if isSibling && !isThin {
+                let isMainFile = !target.path.contains("+") && !target.path.contains("_")
+                let matchesPath = target.path.contains("+" + stdlibType) || target.path.contains(stdlibType + ".")
+                if !isMainFile && !matchesPath {
+                    continue
+                }
+            }
+
+            for member in target.members {
+                if member.accessLevel >= .package {
+                    if !isThin || thinProtocolRequirements.contains(member.name) || member.name == "init" {
+                        member.shouldExpose = true
+                        member.updateTargetAccessLevel(to: member.accessLevel)
+                        interfaceMembers.append(member)
+                        members.append(member)
+                    }
+                }
             }
         }
-        break
+    }
+
+    // Lateral inheritance (sibling extensions)
+    if exploring.declType != .protocolType {
+        let key = exploring.declType == .extensionType ? exploring.name : exploring.name
+        if !key.isEmpty, let siblingDecls = declMap[key], siblingDecls.count > 1 {
+            for sibling in siblingDecls {
+                if sibling.declType == .extensionType && sibling != exploring {
+                    resolveInheritance(target: target, exploring: sibling, declMap: declMap, level: level+1, members: &members, interfaceMembers: &interfaceMembers, visited: &visited, isSibling: true)
+                }
+            }
+        }
     }
 }
 
-private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String, _ refPackage: String?, _ imports: [String], declMap: DeclMap) -> Bool {
+
+private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String, _ refPackage: String?, _ imports: [String], declMap: DeclMap, isInlinable: Bool) -> Bool {
     let j = i + 1
     
     if j < bases.count {
@@ -347,11 +378,12 @@ private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String, _
                 }
                 
                 if let list = list, !list.isEmpty {
-                    if traverseMembers(bases, i + 1, refModule, refPackage, imports, declMap: declMap) {
+                    if traverseMembers(bases, i + 1, refModule, refPackage, imports, declMap: declMap, isInlinable: isInlinable) {
                         for member in list {
                             let updated: Bool
                             if refModule == member.module {
-                                updated = member.updateTargetAccessLevel(to: .internal)
+                                let level: AccessLevel = isInlinable ? member.accessLevel : .internal
+                                updated = member.updateTargetAccessLevel(to: level)
                             } else if member.package != nil && member.package == refPackage {
                                 updated = member.updateTargetAccessLevel(to: .package)
                             } else if imports.contains(member.module) {
@@ -377,7 +409,7 @@ private func traverseMembers(_ bases: [String], _ i: Int, _ refModule: String, _
     return true
 }
 
-private func markVisiblity(_ refs: Set<String>, in refModule: String, package refPackage: String?, imports: [String], with declMap: DeclMap, updateMembers: Bool) {
+private func markVisiblity(_ refs: Set<String>, inlinableRefs: Set<String>, in refModule: String, package refPackage: String?, imports: [String], with declMap: DeclMap, updateMembers: Bool) {
     // Leaf level node checks
     for r in refs {
         
@@ -391,7 +423,7 @@ private func markVisiblity(_ refs: Set<String>, in refModule: String, package re
         // First, traverse member access, and update visibility along the way
         var accessedMembers = false
         if let bases = bases {
-            accessedMembers = traverseMembers(bases, 0, refModule, refPackage, imports, declMap: declMap)
+            accessedMembers = traverseMembers(bases, 0, refModule, refPackage, imports, declMap: declMap, isInlinable: inlinableRefs.contains(r))
         }
         if accessedMembers {
             continue
@@ -414,7 +446,8 @@ private func markVisiblity(_ refs: Set<String>, in refModule: String, package re
                     // 3. if foo inits are the same for multi-modules:
                     //     - need qualifier X.foo
                     if refModule == refDecl.module {
-                        refDecl.updateTargetAccessLevel(to: .internal)
+                        let level: AccessLevel = inlinableRefs.contains(r) ? refDecl.accessLevel : .internal
+                        refDecl.updateTargetAccessLevel(to: level)
                     } else if refDecl.package != nil && refDecl.package == refPackage {
                         if refDecl.updateTargetAccessLevel(to: .package) {
                             refDecl.members.filter({$0.name == "init"}).forEach { $0.updateTargetAccessLevel(to: .package) }

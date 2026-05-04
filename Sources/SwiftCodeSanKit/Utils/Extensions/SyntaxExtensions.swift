@@ -46,6 +46,12 @@ protocol DeclProtocol {
     var accessLevel: AccessLevel { get }
     var isOverride: Bool { get }
     var isExprOrStmt: Bool { get }
+    var attributesDescription: String { get }
+    var isInlinable: Bool { get }
+    var isUsableFromInline: Bool { get }
+    var isFrozen: Bool { get }
+    var isSPI: Bool { get }
+    var isAlwaysEmitIntoClient: Bool { get }
     func declMetadatas(path: String, module: String, encloser: String, description: String, imports: [String]) -> [DeclMetadata]
 }
 
@@ -54,7 +60,6 @@ extension DeclProtocol {
         if let declSyntax = self as? DeclSyntax, let varSyntax = declSyntax.as(VariableDeclSyntax.self) {
             return varSyntax.declMetadatas(path: path, module: module, encloser: encloser, description: description, imports: imports)
         }
-
         let val = DeclMetadata(path: path,
                                  module: module,
                                  imports: imports,
@@ -69,9 +74,38 @@ extension DeclProtocol {
                                  boundTypesAL: boundTypesAL,
                                  accessLevel: accessLevel,
                                  isOverride: isOverride,
+                                 isInlinable: isInlinable,
+                                 isUsableFromInline: isUsableFromInline,
+                                 isFrozen: isFrozen,
+                                 isSPI: isSPI,
+                                 isAlwaysEmitIntoClient: isAlwaysEmitIntoClient,
                                  used: false)
           return [val]
       }
+
+    var isInlinable: Bool {
+        return attributesDescription.contains(String.inlinable)
+    }
+
+    var isUsableFromInline: Bool {
+        return attributesDescription.contains(String.usableFromInline)
+    }
+
+    var isFrozen: Bool {
+        return attributesDescription.contains(String.frozen)
+    }
+
+    var isSPI: Bool {
+        return attributesDescription.contains(String.spi)
+    }
+
+    var isAlwaysEmitIntoClient: Bool {
+        return attributesDescription.contains(String.alwaysEmitIntoClient)
+    }
+
+    var attributesDescription: String {
+        return ""
+    }
 
     func referencedTypes(with declMap: DeclMap, allowUnknown: Bool = false, filterKey: String? = nil) -> [String] {
         return refTypes.filter { allowUnknown || declMap[$0] != nil || $0.contains(".") || $0.hasSuffix("Strings") || $0.hasSuffix("Images") }
@@ -103,6 +137,10 @@ extension Syntax: DeclProtocol {
 
     var isExprOrStmt: Bool {
         return false
+    }
+
+    var attributesDescription: String {
+        return ""
     }
 
     var declType: DeclType {
@@ -377,6 +415,37 @@ extension DeclSyntax: DeclProtocol {
         return .internal
     }
 
+    var attributesDescription: String {
+        if let d = self.as(FunctionDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(VariableDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(InitializerDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(SubscriptDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(ProtocolDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(ClassDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(ExtensionDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(StructDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(EnumDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(EnumCaseDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(TypeAliasDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(AssociatedTypeDeclSyntax.self) {
+            return d.attributesDescription
+        } else if let d = self.as(ActorDeclSyntax.self) {
+            return d.attributesDescription
+        }
+        return ""
+    }
+
     var isOverride: Bool {
         if let d = self.as(FunctionDeclSyntax.self) {
             return d.isOverride
@@ -437,6 +506,10 @@ extension MemberBlockItemSyntax: DeclProtocol {
 
     var fullName: String {
         return decl.fullName
+    }
+
+    var attributesDescription: String {
+        return decl.attributesDescription
     }
 }
 
@@ -763,6 +836,10 @@ extension EnumCaseDeclSyntax: DeclProtocol {
         return .enumCaseType
     }
 
+    var attributesDescription: String {
+        return attributes.trimmedDescription ?? ""
+    }
+
     var boundTypes: [String] {
         let list = elements.compactMap{$0.parameterClause?.parameters.flatMap{$0.type.tokens(viewMode: .all).exprTokenList}}.flatMap{$0}
         return list
@@ -906,6 +983,10 @@ extension AssociatedTypeDeclSyntax: DeclProtocol {
         return .patType
     }
 
+    var attributesDescription: String {
+        return attributes.trimmedDescription ?? ""
+    }
+
     var accessLevel: AccessLevel {
         return self.modifiers.acl
     }
@@ -951,6 +1032,10 @@ extension TypeAliasDeclSyntax: DeclProtocol {
 
     var declType: DeclType {
         return .typealiasType
+    }
+
+    var attributesDescription: String {
+        return attributes.trimmedDescription ?? ""
     }
     var accessLevel: AccessLevel {
         return self.modifiers.acl
@@ -1044,6 +1129,11 @@ extension VariableDeclSyntax: DeclProtocol {
                                        boundTypesAL: bound,
                                        accessLevel: accessLevel,
                                        isOverride: isOverride,
+                                       isInlinable: isInlinable,
+                                       isUsableFromInline: isUsableFromInline,
+                                       isFrozen: isFrozen,
+                                       isSPI: isSPI,
+                                       isAlwaysEmitIntoClient: isAlwaysEmitIntoClient,
                                        used: false)
                 list.append(val)
             } else if let tuple = binding.pattern.as(TuplePatternSyntax.self) {
@@ -1069,6 +1159,11 @@ extension VariableDeclSyntax: DeclProtocol {
                                                boundTypesAL: bound,
                                                accessLevel: accessLevel,
                                                isOverride: isOverride,
+                                               isInlinable: isInlinable,
+                                               isUsableFromInline: isUsableFromInline,
+                                               isFrozen: isFrozen,
+                                               isSPI: isSPI,
+                                               isAlwaysEmitIntoClient: isAlwaysEmitIntoClient,
                                                used: false)
                         list.append(val)
                     }
@@ -1309,6 +1404,10 @@ extension SubscriptDeclSyntax: DeclProtocol {
 
     var declType: DeclType {
         return .subscriptType
+    }
+
+    var attributesDescription: String {
+        return attributes.trimmedDescription ?? ""
     }
 
     var accessLevel: AccessLevel {

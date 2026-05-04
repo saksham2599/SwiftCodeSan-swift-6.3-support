@@ -46,7 +46,7 @@ public func removeDeadDecls(filesToModules: [String: String],
     
     log("Check references, look up their source modules, and mark used...")
     let flatDeclMap = flatten(declMap: declMap)
-    p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { (path, refs, imports) in
+    p.checkRefs(fileToModuleMap: filesToModules, declMap: flatDeclMap) { (path, refs, inlinableRefs, imports) in
         if let refModule = filesToModules[path] {
             markUsed(refs, in: refModule, imports: imports, with: flatDeclMap, updateMembers: true)
         }

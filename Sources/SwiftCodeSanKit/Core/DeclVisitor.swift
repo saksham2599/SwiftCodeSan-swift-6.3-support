@@ -107,13 +107,22 @@ final class DeclVisitor: SyntaxVisitor {
             if encloserWhitelisted ||
                 memberWhitelisted ||
                 mdecl.declType == .initType ||
-                mdecl.declType == .subscriptType ||
                 mdecl.declType == .operatorType {
                 if mdecl.isPublicOrOpen {
                     mdecl.shouldExpose = true
                 }
                 mdecl.used = true
                 mdecl.updateTargetAccessLevel(to: mdecl.accessLevel)
+            } else if mdecl.isInlinable || mdecl.isUsableFromInline || mdecl.isFrozen || mdecl.isSPI || mdecl.isAlwaysEmitIntoClient {
+                if mdecl.isPublicOrOpen {
+                    mdecl.shouldExpose = true
+                }
+                mdecl.used = true
+                if mdecl.isSPI {
+                    mdecl.updateTargetAccessLevel(to: .public)
+                } else {
+                    mdecl.updateTargetAccessLevel(to: mdecl.accessLevel)
+                }
             }
         }
         return mdecls
@@ -138,6 +147,16 @@ final class DeclVisitor: SyntaxVisitor {
                 }
                 decl.used = true
                 decl.updateTargetAccessLevel(to: decl.accessLevel)
+            } else if decl.isInlinable || decl.isUsableFromInline || decl.isFrozen || decl.isSPI || decl.isAlwaysEmitIntoClient {
+                if decl.isPublicOrOpen {
+                    decl.shouldExpose = true
+                }
+                decl.used = true
+                if decl.isSPI {
+                    decl.updateTargetAccessLevel(to: .public)
+                } else {
+                    decl.updateTargetAccessLevel(to: decl.accessLevel)
+                }
             }
 
             if let members = members {
@@ -163,9 +182,9 @@ final class DeclVisitor: SyntaxVisitor {
             if !decl.name.isEmpty, declMap[decl.name] == nil {
                 declMap[decl.name] = []
             }
-
             declMap[decl.name]?.append(decl)
         }
+
     }
 }
 

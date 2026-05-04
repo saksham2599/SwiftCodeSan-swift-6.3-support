@@ -50,9 +50,10 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
 
     let allDeclMap = p.scanAndMapDecls(fileToModuleMap: fileToModuleMap,
                                        topDeclsOnly: topDeclsOnly)
+    let flatDeclMap = flatten(declMap: allDeclMap)
 
     logTime()
-    log("#Decls", allDeclMap.keys.count)
+    log("#Decls", flatDeclMap.keys.count)
 
     unusedImports = [String: [String]]()
     total = 0
@@ -90,13 +91,13 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
     }
 
     log("Check referenced decls and compare their source modules against imported modules to filter out unused imports...")
-    p.checkRefs(fileToModuleMap: fileToModuleMap, declMap: allDeclMap) { @Sendable (filepath, refs, imports) in
+    p.checkRefs(fileToModuleMap: fileToModuleMap, declMap: flatDeclMap) { @Sendable (filepath, refs, inlinableRefs, imports) in
         var usedImportsInFile = [String: Bool]()
         for i in imports {
             usedImportsInFile[i] = whitelistModulesBlock(i)
         }
         for r in refs {
-            if let refDecls = allDeclMap[r] {
+            if let refDecls = flatDeclMap[r] {
                 for refDecl in refDecls {
                     let m = refDecl.module
 
@@ -160,7 +161,7 @@ public func removeUnusedImports(fileToModuleMap: [String: String],
         ret.append("Total unused: \(totalUnused)")
         let retStr = ret.joined(separator: "\n\n")
 
-        let declstr = allDeclMap.map{ (k, v) -> String in
+        let declstr = flatDeclMap.map{ (k, v) -> String in
             let t = """
             \(k):  \(v.map { $0.path }.joined(separator: ", "))
             """

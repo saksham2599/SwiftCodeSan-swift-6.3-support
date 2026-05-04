@@ -1,0 +1,454 @@
+[1/1] Compiling plugin GenerateManual
+[2/2] Compiling plugin GenerateDoccReference
+Building for production...
+[2/4] Write swift-version--58304C5D6DBC2206.txt
+[4/5] Compiling SwiftCodeSanKit AccessLevelRewriter.swift
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:41:9: error: expected declaration
+ 22 | */
+ 23 | 
+ 24 | final class RefChecker: SyntaxVisitor {
+    |             `- note: in declaration of 'RefChecker'
+ 25 |     var imports = [String]()
+ 26 |     private var declMap = DeclMap()
+    :
+ 39 |     }
+ 40 | 
+ 41 |         if node.item.is(ExprSyntax.self) || node.item.is(StmtSyntax.self) {
+    |         `- error: expected declaration
+ 42 |             reflist.append(contentsOf: node.item.referencedTypes(with: declMap, allowUnknown: true))
+ 43 |             return .skipChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:123:1: error: extraneous '}' at top level
+121 |         return .skipChildren
+122 |     }
+123 | }
+    | `- error: extraneous '}' at top level
+124 | 
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:49:5: error: 'override' can only be specified on class members
+ 47 |     }
+ 48 | 
+ 49 |     override func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 50 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 51 |         if node.isOverride {
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:58:5: error: 'override' can only be specified on class members
+ 56 |     }
+ 57 | 
+ 58 |     override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 59 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 60 |         if node.isOverride {
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:66:5: error: 'override' can only be specified on class members
+ 64 |     }
+ 65 | 
+ 66 |     override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 67 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 68 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:71:5: error: 'override' can only be specified on class members
+ 69 |     }
+ 70 | 
+ 71 |     override func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 72 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 73 |         if node.isOverride {
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:79:5: error: 'override' can only be specified on class members
+ 77 |     }
+ 78 | 
+ 79 |     override func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 80 |          reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 81 |          return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:84:5: error: 'override' can only be specified on class members
+ 82 |      }
+ 83 | 
+ 84 |     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 85 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 86 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:88:5: error: 'override' can only be specified on class members
+ 86 |         return .visitChildren
+ 87 |     }
+ 88 |     override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 89 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 90 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:92:5: error: 'override' can only be specified on class members
+ 90 |         return .visitChildren
+ 91 |     }
+ 92 |     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 93 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 94 |         reflist.append(node.name)
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:97:5: error: 'override' can only be specified on class members
+ 95 |         return .visitChildren
+ 96 |     }
+ 97 |     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+ 98 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 99 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:101:5: error: 'override' can only be specified on class members
+ 99 |         return .visitChildren
+100 |     }
+101 |     override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+102 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+103 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:106:5: error: 'override' can only be specified on class members
+104 |     }
+105 | 
+106 |     override func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+107 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+108 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:111:5: error: 'override' can only be specified on class members
+109 |     }
+110 | 
+111 |     override func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+112 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+113 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:116:5: error: 'override' can only be specified on class members
+114 |     }
+115 | 
+116 |     override func visit(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
+    |     `- error: 'override' can only be specified on class members
+117 |         if node.attributes.isEmpty, node.importKindSpecifier == nil {
+118 |             let str = node.path.description.trimmed
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:50:9: error: cannot find 'reflist' in scope
+ 48 | 
+ 49 |     override func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
+ 50 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 51 |         if node.isOverride {
+ 52 |             reflist.append(node.name)
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:50:63: error: cannot find 'declMap' in scope
+ 48 | 
+ 49 |     override func visit(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
+ 50 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 51 |         if node.isOverride {
+ 52 |             reflist.append(node.name)
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:52:13: error: cannot find 'reflist' in scope
+ 50 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 51 |         if node.isOverride {
+ 52 |             reflist.append(node.name)
+    |             `- error: cannot find 'reflist' in scope
+ 53 |         }
+ 54 | 
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:59:9: error: cannot find 'reflist' in scope
+ 57 | 
+ 58 |     override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+ 59 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 60 |         if node.isOverride {
+ 61 |             reflist.append(node.name)
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:59:63: error: cannot find 'declMap' in scope
+ 57 | 
+ 58 |     override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+ 59 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 60 |         if node.isOverride {
+ 61 |             reflist.append(node.name)
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:61:13: error: cannot find 'reflist' in scope
+ 59 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 60 |         if node.isOverride {
+ 61 |             reflist.append(node.name)
+    |             `- error: cannot find 'reflist' in scope
+ 62 |         }
+ 63 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:67:9: error: cannot find 'reflist' in scope
+ 65 | 
+ 66 |     override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+ 67 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 68 |         return .visitChildren
+ 69 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:67:63: error: cannot find 'declMap' in scope
+ 65 | 
+ 66 |     override func visit(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+ 67 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 68 |         return .visitChildren
+ 69 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:72:9: error: cannot find 'reflist' in scope
+ 70 | 
+ 71 |     override func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+ 72 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 73 |         if node.isOverride {
+ 74 |             reflist.append(node.name)
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:72:63: error: cannot find 'declMap' in scope
+ 70 | 
+ 71 |     override func visit(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+ 72 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 73 |         if node.isOverride {
+ 74 |             reflist.append(node.name)
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:74:13: error: cannot find 'reflist' in scope
+ 72 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 73 |         if node.isOverride {
+ 74 |             reflist.append(node.name)
+    |             `- error: cannot find 'reflist' in scope
+ 75 |         }
+ 76 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:80:10: error: cannot find 'reflist' in scope
+ 78 | 
+ 79 |     override func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
+ 80 |          reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |          `- error: cannot find 'reflist' in scope
+ 81 |          return .visitChildren
+ 82 |      }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:80:64: error: cannot find 'declMap' in scope
+ 78 | 
+ 79 |     override func visit(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
+ 80 |          reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                                `- error: cannot find 'declMap' in scope
+ 81 |          return .visitChildren
+ 82 |      }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:85:9: error: cannot find 'reflist' in scope
+ 83 | 
+ 84 |     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
+ 85 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 86 |         return .visitChildren
+ 87 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:85:63: error: cannot find 'declMap' in scope
+ 83 | 
+ 84 |     override func visit(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
+ 85 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 86 |         return .visitChildren
+ 87 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:89:9: error: cannot find 'reflist' in scope
+ 87 |     }
+ 88 |     override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
+ 89 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 90 |         return .visitChildren
+ 91 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:89:63: error: cannot find 'declMap' in scope
+ 87 |     }
+ 88 |     override func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
+ 89 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 90 |         return .visitChildren
+ 91 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:93:9: error: cannot find 'reflist' in scope
+ 91 |     }
+ 92 |     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
+ 93 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 94 |         reflist.append(node.name)
+ 95 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:93:63: error: cannot find 'declMap' in scope
+ 91 |     }
+ 92 |     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
+ 93 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 94 |         reflist.append(node.name)
+ 95 |         return .visitChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:94:9: error: cannot find 'reflist' in scope
+ 92 |     override func visit(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
+ 93 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+ 94 |         reflist.append(node.name)
+    |         `- error: cannot find 'reflist' in scope
+ 95 |         return .visitChildren
+ 96 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:98:9: error: cannot find 'reflist' in scope
+ 96 |     }
+ 97 |     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
+ 98 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+ 99 |         return .visitChildren
+100 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:98:63: error: cannot find 'declMap' in scope
+ 96 |     }
+ 97 |     override func visit(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
+ 98 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+ 99 |         return .visitChildren
+100 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:102:9: error: cannot find 'reflist' in scope
+100 |     }
+101 |     override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+102 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+103 |         return .visitChildren
+104 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:102:63: error: cannot find 'declMap' in scope
+100 |     }
+101 |     override func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+102 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+103 |         return .visitChildren
+104 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:107:9: error: cannot find 'reflist' in scope
+105 | 
+106 |     override func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
+107 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+108 |         return .visitChildren
+109 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:107:63: error: cannot find 'declMap' in scope
+105 | 
+106 |     override func visit(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
+107 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+108 |         return .visitChildren
+109 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:112:9: error: cannot find 'reflist' in scope
+110 | 
+111 |     override func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
+112 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |         `- error: cannot find 'reflist' in scope
+113 |         return .visitChildren
+114 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:112:63: error: cannot find 'declMap' in scope
+110 | 
+111 |     override func visit(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
+112 |         reflist.append(contentsOf: node.referencedTypes(with: declMap, allowUnknown: true))
+    |                                                               `- error: cannot find 'declMap' in scope
+113 |         return .visitChildren
+114 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Core/RefChecker.swift:119:13: error: cannot find 'imports' in scope
+117 |         if node.attributes.isEmpty, node.importKindSpecifier == nil {
+118 |             let str = node.path.description.trimmed
+119 |             imports.append(str)
+    |             `- error: cannot find 'imports' in scope
+120 |         }
+121 |         return .skipChildren
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:501:16: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+ 499 | 
+ 500 |     var name: String {
+ 501 |         return identifier.text.raw
+     |                |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                `- note: use 'name' instead
+ 502 |     }
+ 503 |     
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:568:16: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+ 566 | 
+ 567 |     var name: String {
+ 568 |         return identifier.text.raw
+     |                |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                `- note: use 'name' instead
+ 569 |     }
+ 570 |     
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:699:35: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+ 697 | 
+ 698 |     var name: String {
+ 699 |         let ret = elements.map{$0.identifier.text}.first ?? elements.description
+     |                                   |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                                   `- note: use 'name' instead
+ 700 |         return ret.raw
+ 701 |     }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:749:16: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+ 747 | 
+ 748 |     var name: String {
+ 749 |         return identifier.text.trimmed.raw
+     |                |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                `- note: use 'name' instead
+ 750 |     }
+ 751 |     var accessLevel: String {
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:801:16: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+ 799 | 
+ 800 |     var name: String {
+ 801 |         return identifier.text.trimmed.raw
+     |                |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                `- note: use 'name' instead
+ 802 |     }
+ 803 |     var declType: DeclType {
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:844:16: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+ 842 | 
+ 843 |     var name: String {
+ 844 |         return identifier.text.trimmed.raw
+     |                |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                `- note: use 'name' instead
+ 845 |     }
+ 846 | 
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:891:16: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+ 889 | 
+ 890 |     var name: String {
+ 891 |         return identifier.text.trimmed.raw
+     |                |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                `- note: use 'name' instead
+ 892 |     }
+ 893 | 
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:1094:21: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+1092 | extension FunctionDeclSyntax: DeclProtocol {
+1093 |     var name: String {
+1094 |         return self.identifier.description.trimmed.raw
+     |                     |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                     `- note: use 'name' instead
+1095 |     }
+1096 | 
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:1106:17: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+1104 | 
+1105 |     var declType: DeclType {
+1106 |         if self.identifier.tokenKind == .binaryOperator(self.identifier.text) {
+     |                 |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                 `- note: use 'name' instead
+1107 |             return .operatorType
+1108 |         }
+
+/Users/sakshamgoyal/development/SwiftCodeSan/Sources/SwiftCodeSanKit/Utils/Extensions/SyntaxExtensions.swift:1106:62: warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+1104 | 
+1105 |     var declType: DeclType {
+1106 |         if self.identifier.tokenKind == .binaryOperator(self.identifier.text) {
+     |                                                              |- warning: 'identifier' is deprecated: renamed to 'name' [#DeprecatedDeclaration]
+     |                                                              `- note: use 'name' instead
+1107 |             return .operatorType
+1108 |         }
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>

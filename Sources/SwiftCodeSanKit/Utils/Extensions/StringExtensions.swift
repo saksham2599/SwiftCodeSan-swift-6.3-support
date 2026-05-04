@@ -34,6 +34,11 @@ extension String {
     static let varColon = "var:"
     static let annotationArgDelimiter = ";"
     static let transparent = "@_transparent"
+    static let inlinable = "@inlinable"
+    static let usableFromInline = "@usableFromInline"
+    static let frozen = "@frozen"
+    static let spi = "@_spi"
+    static let alwaysEmitIntoClient = "@_alwaysEmitIntoClient"
     static let propertyWrapper = "propertyWrapper"
     
     var raw: String {

@@ -1,0 +1,1 @@
+warning: 'swiftcodesan': 'SwiftCodeSan' was identified as an executable target given the presence of a 'main' file. Starting with tools version 5.4.0 executable targets should be declared as 'executableTarget()'

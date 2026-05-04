@@ -135,11 +135,29 @@ struct Executor: ParsableCommand {
         return FileManager.default.currentDirectoryPath + "/" + path
     }
 
+    private func parseList(_ list: [String]) -> [String] {
+        return list.flatMap { arg in
+            if arg.contains(":") {
+                return [arg]
+            }
+            let path = fullPath(arg)
+            var isDir: ObjCBool = false
+            if FileManager.default.fileExists(atPath: path, isDirectory: &isDir), !isDir.boolValue {
+                if let content = try? String(contentsOfFile: path, encoding: .utf8) {
+                    return content.components(separatedBy: .newlines)
+                        .map { $0.trimmingCharacters(in: .whitespaces) }
+                        .filter { !$0.isEmpty && !$0.hasPrefix("//") && !$0.hasPrefix("#") }
+                }
+            }
+            return [arg]
+        }
+    }
+
     mutating func run() throws {
         minLogLevel = loggingLevel
 
         var filesToModules = [String: String]()
-        fileLists.forEach { arg in
+        parseList(fileLists).forEach { arg in
             let line = arg.components(separatedBy: ":")
             if let key = line.first, let val = line.last {
                 filesToModules[key] = val
@@ -147,7 +165,7 @@ struct Executor: ParsableCommand {
         }
 
         var modulesToPackages = [String: String]()
-        packageLists.forEach { arg in
+        parseList(packageLists).forEach { arg in
             let line = arg.components(separatedBy: ":")
             if let key = line.first, let val = line.last {
                 modulesToPackages[key] = val
@@ -158,7 +176,7 @@ struct Executor: ParsableCommand {
                                   decls: whitelistDecls,
                                   declsPrefix: whitelistDeclsPrefix,
                                   declsSuffix: whitelistDeclsSuffix,
-                                  modules: [whitelistModules, syslibLists].compactMap{$0}.flatMap{$0},
+                                  modules: [whitelistModules, parseList(syslibLists)].compactMap{$0}.flatMap{$0},
                                   modulesPrefix: whitelistModulesPrefix,
                                   modulesSuffix: whitelistModulesSuffix,
                                   inheritedTypes: whitelistParents,

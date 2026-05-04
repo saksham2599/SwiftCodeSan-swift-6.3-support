@@ -41,8 +41,28 @@ public class DeclParser: @unchecked Sendable {
                 }
 
                 for decl in decls {
-                    if allDeclMap[k]?.contains(decl) ?? false {
-                        // Already added, so do nothing
+                    if let existingIdx = allDeclMap[k]?.firstIndex(of: decl) {
+                        let newMembers = decl.members
+                        if !newMembers.isEmpty {
+                            var existingMembers = allDeclMap[k]![existingIdx].members
+                            for nm in newMembers {
+                                if !existingMembers.contains(nm) {
+                                    existingMembers.append(nm)
+                                }
+                            }
+                            allDeclMap[k]![existingIdx].members = existingMembers
+                        }
+                        
+                        let newInherited = decl.inheritedTypes
+                        if !newInherited.isEmpty {
+                            var existingInherited = allDeclMap[k]![existingIdx].inheritedTypes
+                            for it in newInherited {
+                                if !existingInherited.contains(it) {
+                                    existingInherited.append(it)
+                                }
+                            }
+                            allDeclMap[k]![existingIdx].inheritedTypes = existingInherited
+                        }
                     } else {
                         allDeclMap[k]?.append(decl)
                     }
@@ -122,7 +142,7 @@ public class DeclParser: @unchecked Sendable {
 
     func checkRefs(fileToModuleMap: [String: String],
                    declMap: DeclMap,
-                   completion: @Sendable @escaping (String, Set<String>, [String]) -> ()) {
+                   completion: @Sendable @escaping (String, Set<String>, Set<String>, [String]) -> ()) {
 
         scan(fileToModuleMap) { (path: String, module: String, lock: NSLock?) in
             self.referenceSrc(path: path, module: module, declMap: declMap, lock: lock, completion: completion)
@@ -133,14 +153,14 @@ public class DeclParser: @unchecked Sendable {
                                module: String,
                                declMap: DeclMap,
                                lock: NSLock?,
-                               completion: @Sendable @escaping (String, Set<String>, [String]) -> ()) {
+                               completion: @Sendable @escaping (String, Set<String>, Set<String>, [String]) -> ()) {
         do {
             let node = Parser.parse(source: try String(contentsOfFile: path, encoding: .utf8))
             let visitor = RefChecker(path, module: module, declMap: declMap)
             visitor.walk(node)
             
             lock?.lock()
-            completion(path, visitor.refs, visitor.imports)
+            completion(path, visitor.refs, visitor.inlinableRefs, visitor.imports)
             lock?.unlock()
         } catch {
             log("Error reading file \(path): \(error.localizedDescription)", level: .error)
@@ -183,7 +203,7 @@ public class DeclParser: @unchecked Sendable {
                    isDirs: Bool,
                    pathToModules: [String: String],
                    declMap: DeclMap,
-                   completion: @Sendable @escaping (String, Set<String>, [String]) -> ()) {
+                   completion: @Sendable @escaping (String, Set<String>, Set<String>, [String]) -> ()) {
 
         if isDirs {
             scan(dirs: paths) { (path: String, lock: NSLock?) in
