@@ -159,20 +159,15 @@ final class RefChecker: SyntaxVisitor {
         // For selective imports like `import class Foundation.NSObject`, extract
         // the root module name (the first path component, e.g. "Foundation")
         // so it is tracked and never incorrectly removed.
-        if node.importKindSpecifier != nil {
-            // Selective import: `import class/func/var/struct/enum/typealias Module.Symbol`
-            if let rootModule = node.path.first?.name.text {
-                imports.append(rootModule)
-            }
-        } else if node.attributes.isEmpty {
-            // Plain import with no attributes: `import ModuleName`
-            let str = node.path.description.trimmed
-            imports.append(str)
+        // For plain imports like `import Foo.Bar`, also take the first component "Foo"
+        // This ensures we track the root module regardless of import form
+        if let firstComponent = node.path.first?.name.text {
+            imports.append(firstComponent)
         } else {
-            // @testable or @_exported import — track the module so it is not
-            // considered unused, but the ImportRewriter will never remove them.
-            if let rootModule = node.path.first?.name.text {
-                imports.append(rootModule)
+            // Get the first dot-separated component as a string
+            let pathString = node.path.description
+            if let firstComponent = pathString.components(separatedBy: ".").first {
+                imports.append(firstComponent.trimmed)
             }
         }
         return .skipChildren

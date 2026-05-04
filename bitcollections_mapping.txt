@@ -1,0 +1,61 @@
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra symmetricDifference.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formIntersection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Codable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra conformance.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra subtract.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Sorted Collection APIs.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formUnion.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isStrictSuperset.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Extras.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra formSymmetricDifference.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+ExpressibleByArrayLiteral.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isEqualSet.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+BidirectionalCollection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+CustomStringConvertible.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Random.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet.Counted.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+CustomDebugStringConvertible.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+CustomReflectable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Initializers.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isSubset.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet.Index.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra basics.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isDisjoint.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra union.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Equatable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isSuperset.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra subtracting.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra intersection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet._UnsafeHandle.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Hashable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+Invariants.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitSet/BitSet+SetAlgebra isStrictSubset.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/Slice+Utilities.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/Range+Utilities.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/UInt+Tricks.swift:BitCollections
+../swift-collections/Sources/BitCollections/Shared/_Word.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Descriptions.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+ChunkedBitsIterators.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+CustomReflectable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+BitwiseOperations.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Invariants.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BinaryInteger extensions.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Fill.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Shifts.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+RandomBits.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Collection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Extras.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+ExpressibleByArrayLiteral.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Codable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+RangeReplaceableCollection.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Initializers.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+LosslessStringConvertible.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray._UnsafeHandle.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Copy.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Hashable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Equatable.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+ExpressibleByStringLiteral.swift:BitCollections
+../swift-collections/Sources/BitCollections/BitArray/BitArray+Testing.swift:BitCollections
+../swift-collections/Sources/Collections/BitCollections reexports.swift:Collections

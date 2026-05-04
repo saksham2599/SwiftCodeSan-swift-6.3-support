@@ -41,19 +41,25 @@ public final class ImportRewriter: SyntaxRewriter {
             return super.visit(node)
         }
 
-        var remove = false
-        let str = node.path.description.trimmed
-        if unused.contains(str) {
-            remove = true
+        // Determine the root module name to match against the unused list
+        let importPath = node.path.description.trimmed
+        var moduleName = importPath
+
+        if node.importKindSpecifier != nil {
+            // Selective import: `import class Foo.Bar` → module is "Foo"
+            if let firstComponent = node.path.first?.name.text {
+                moduleName = firstComponent
+            }
         } else {
-            for t in node.path.tokens(viewMode: .all) {
-                if unused.contains(t.text) {
-                    remove = true
-                }
+            // Plain import (could be `import Foo` or `import Foo.Bar`)
+            // Use the first dot‑separated component as the module name
+            let parts = importPath.components(separatedBy: ".")
+            if !parts.isEmpty {
+                moduleName = parts[0]
             }
         }
 
-        if remove {
+        if unused.contains(moduleName) {
             return DeclSyntax(MissingDeclSyntax(placeholder: .identifier("")))
         }
 

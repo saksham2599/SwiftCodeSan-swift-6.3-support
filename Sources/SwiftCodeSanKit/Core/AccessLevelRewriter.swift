@@ -31,8 +31,9 @@ public final class AccessLevelRewriter: SyntaxRewriter {
     }
 
     private func updateModifiers(_ name: String, encloser: String, fullName: String, description: String, declType: DeclType, modifiers: DeclModifierListSyntax) -> (updated: DeclModifierListSyntax, leadingTrivia: Trivia?, isModified: Bool)? {
+        // Match using name, encloser, and declType — ignore fullName and description which may contain formatting differences
         let declMetadata = decls.first(where: { (d: DeclMetadata) -> Bool in
-            return d.name == name && d.encloser == encloser && d.fullName == fullName && d.declDescription == description && d.declType == declType
+            return d.name == name && d.encloser == encloser && d.declType == declType
         })
 
         if let d = declMetadata {
@@ -43,7 +44,7 @@ public final class AccessLevelRewriter: SyntaxRewriter {
             let targetAL = d.targetAccessLevel ?? .internal
             for modifier in modifiers {
                 let modText = modifier.name.text
-                if modText == String.public || modText == String.open || modText == "package" {
+                if modText == "public" || modText == "open" || modText == "package" {
                     isModified = true
                     if preservedTrivia == nil {
                         preservedTrivia = modifier.leadingTrivia
@@ -57,9 +58,15 @@ public final class AccessLevelRewriter: SyntaxRewriter {
                     list.append(m)
                 }
             }
-            
+
             if targetAL >= .package {
-                let keyword = TokenSyntax.keyword(targetAL == .open ? .open : (targetAL == .public ? .public : .package))
+                let keyword: TokenSyntax
+                switch targetAL {
+                case .open: keyword = TokenSyntax.keyword(.open)
+                case .public: keyword = TokenSyntax.keyword(.public)
+                case .package: keyword = TokenSyntax.keyword(.package)
+                default: keyword = TokenSyntax.keyword(.internal)
+                }
                 var newModifier = DeclModifierSyntax(name: keyword.with(\.trailingTrivia, .spaces(1)))
                 if let trivia = preservedTrivia {
                     newModifier.leadingTrivia = trivia

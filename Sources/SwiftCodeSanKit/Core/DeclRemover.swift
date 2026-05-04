@@ -112,7 +112,9 @@ public final class DeclRemover: SyntaxRewriter {
 
     private func shouldRemove(_ name: String, encloser: String, fullName: String, description: String, declType: DeclType) -> Bool {
         let inList = decls.contains(where: { (d: DeclMetadata) -> Bool in
-            return d.name == name && d.encloser == encloser && d.fullName == fullName && d.declDescription == description && d.declType == declType
+            // Match on essential identity: name, encloser, and declType
+            // Ignore fullName and description which can vary due to formatting/context
+            return d.name == name && d.encloser == encloser && d.declType == declType
         })
         return inList
     }
